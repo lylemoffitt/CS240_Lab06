@@ -13,3 +13,13 @@ Description:
 - Every match will result in the printing of the movie that the contained *MoviePtr points to.
 
 Functions:
+
+- readFile()
+  - Takes initialization file as input and returns it (one line at a time).  
+- addNew()
+  - parseCommas()
+    - Takes raw string from readFile() and parses it into category substrings by comma delimination.
+  - For each category:
+    - std::vector::insert()
+    - setPtr() to movie
+- 
