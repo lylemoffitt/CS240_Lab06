@@ -6,6 +6,6 @@ using namespace std;
 
 int main()
 {
-  cout << "Hello World!" << endl;
+  // Do some stuff with imdb.h
   return 0;
 }
