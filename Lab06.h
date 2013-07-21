@@ -14,8 +14,13 @@ private:
 	struct element
 	{
 		std::string Name;	// The name of the element (Title, Rating, Director, Actor)
-		typedef element* MoviePtr;		// A pointer to the movie that this was in
-		element(std::string theName);
+		typedef element* MoviePtr; // A pointer to the movie that this was in
+		MoviePtr link;
+		element(std::string theName)
+		{
+			Name = theName;
+			link = nullptr;
+		}
 	};
 	 //there's error for the 'theName'
 	typedef element* indexPtr;
@@ -27,7 +32,6 @@ private:
 		D, //director
 		S //actors
 	};
-
 public:
 	data();		// Class constructor
 	~data();	// Class destructor
