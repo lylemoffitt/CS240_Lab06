@@ -1,15 +1,19 @@
+#ifndef IMDB_H
 #include "Lab06.h"
+#endif //IMDB_H
+
+#ifdef IMDB_H
 using namespace std;
 
 //class data
 // Class constructor
 	data::data()
 	{
-			
+
 
 
 	}
-	
+
 
 	// Class destructor
 	data::~data()
@@ -80,7 +84,7 @@ using namespace std;
 		startTime = 0;
 		stopTime = 0;
 	}
-	stopWatch::~stopWatch()		// Class destructor
+	stopWatch::~stopWatch()			// Class destructor
 	{
 		delete &startTime;
 		delete &stopTime;
@@ -99,3 +103,5 @@ using namespace std;
 		// This probably needs to be formatted..
 		return difftime(startTime,stopTime);
 	}
+
+#endif //IMDB_H
