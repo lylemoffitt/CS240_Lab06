@@ -22,9 +22,9 @@ private:
 			link = nullptr;
 		}
 	};
-	 //there's error for the 'theName'
 	typedef element* indexPtr;
 	typedef std::vector<element> kindList; // The vector of each category list
+	kindList theVector;   //The vector list -Tania
 	enum category
 	{
 		T = 1, //title
@@ -32,12 +32,17 @@ private:
 		D, //director
 		S //actors
 	};
+	
+	int comma, //keeps track of placememt in string for parseCommas fnt -Tania
+	    space; //keeps track of placement in string for parseSpace fnt -Tania
 public:
 	data();		// Class constructor
 	~data();	// Class destructor
 
-	int readFile(std::streambuf FILE);
+	int readFile(std::istream& FILE); //was streambuf...tried using this to open
+					   //a file but shot out errors -Tania
 	std::string parseCommas(std::string rawData);
+	std::string parseSpaces(std::string rawData);  //-Tania
 	bool addNew(std::string rawData); // IF parseCommas is run outside of this, then the param can be empty
 	indexPtr binarySearch(kindList list, std::string search_term);
 	bool getMatch(category group, std::string sub_string);
