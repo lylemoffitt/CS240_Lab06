@@ -23,6 +23,9 @@ using namespace std;
 
 	int data::readFile(streambuf FILE)
 	{
+		string item;
+		getline(FILE,item);
+		parseCommas(item);
 		// Takes in the initialization file as input.
 		// Returns the length of the raw data string from the file, or zero on failure
 		return 0;
@@ -30,10 +33,16 @@ using namespace std;
 
 	string data::parseCommas(string rawData)
 	{
-		//stringstream ss;
-		string item;
-		ifstream infile(rawData);
-		getline(infile, item, ',');
+		int i=0;
+		string pos = rawData.at(i), temp;
+		while(!rawData.end())
+		{
+			if(rawData.at(i) == ' ')
+			{
+				//temp = 
+			}
+			i++;
+		}
 		// Read raw data string up to first comma
 		// Return string with leading/trailing whitespace stripped
 		// Repeat until string.end()
