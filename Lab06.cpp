@@ -5,8 +5,8 @@ using namespace std;
 // Class constructor
 	data::data()
 	{
-			
-
+		comma = 0; //initialize counters -Tania	
+		space = 0;
 
 	}
 	
@@ -16,34 +16,67 @@ using namespace std;
 	{
 
 	}
-
-	int data::readFile(streambuf FILE)
+	//takes in the file and reads the first line and returns the string -Tania
+	string data::readFile(istream& FILE)
 	{
 		string item;
 		getline(FILE,item);
-		parseCommas(item);
 		// Takes in the initialization file as input.
 		// Returns the length of the raw data string from the file, or zero on failure
-		return 0;
+		return item;
 	}
-
+	//takes string from readFile and parses it by commas -Tania
+	//checks to see next charachter in string is a space if it is it fixes comma
+	//then it copies the strung into a temp up until the first comma 
+	//then it increase the count and returns the parsed string
 	string data::parseCommas(string rawData)
 	{
-		int i=0;
-		string pos = rawData.at(i), temp;
-		while(!rawData.end())
+		if(rawdata.at(comma) == ' ')
+			comma += 1;
+		else if(rawData.at(comma) == '\0')
 		{
-			if(rawData.at(i) == ' ')
-			{
-				//temp = 
-			}
-			i++;
+			comma = 0;
+			return "0";
 		}
+		string temp;
+		while(rawData.at(comma) != ',' && rawData.at(comma) != '\0')
+		{
+			temp.at(comma) = rawData.at(comma);
+			comma++;
+		}
+		comma++;
+		return temp;
+		/*
+		if(rawData.at(amount) == ' ')
+			rawData.erase(pos,amount+1);
+		else 
+			rawData.erase(pos,amount);*/
 		// Read raw data string up to first comma
 		// Return string with leading/trailing whitespace stripped
 		// Repeat until string.end()
-		return 0;
 	}
+	//takes in string parsed by the parseComma fnt and parses it by spaces -Tania
+	//this does the exact same thing as parseComma except it parses it at the spaces
+	string data::parseSpaces(string rawData)
+	{
+		if(rawData.at(space) == ' ')
+			space += 1;
+		else if(rawData.at(space) == '\0')
+		{
+			space = 0;
+			return "0"; //or we can say while string.at(string.length()) != comma in addnew function
+		}
+		string temp;
+		while(rawData.at(space) != ' ' && rawData.at(space) != '\0')
+		{
+			temp.at(space) = rawData.at(space);
+			space++;
+		}
+		//rawData.erase(pos,i);
+		space++;
+		return temp;
+	}
+
 
 	bool data::addNew(string rawData) // IF parseCommas is run outside of this, then the param can be empty
 	{
