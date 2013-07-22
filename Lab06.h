@@ -39,8 +39,9 @@ public:
 	data();		// Class constructor
 	~data();	// Class destructor
 
-	int readFile(std::istream& FILE); //was streambuf...tried using this to open
+	std::string readFile(std::istream& FILE); //was streambuf...tried using this to open
 					   //a file but shot out errors -Tania
+					   //it was int before
 	std::string parseCommas(std::string rawData);
 	std::string parseSpaces(std::string rawData);  //-Tania
 	bool addNew(std::string rawData); // IF parseCommas is run outside of this, then the param can be empty
