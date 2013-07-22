@@ -27,10 +27,11 @@ private:
 	typedef std::vector<element> kindList; // The vector of each category list
 	enum category
 	{
-		T = 1, //title
-		R, //rating
-		D, //director
-		S //actors
+		N,	// Name of the movie that we return
+		T,	//title
+		R,	//rating
+		D,	//director
+		S	//actors = "Stars"
 	};
 public:
 	data();		// Class constructor
@@ -54,7 +55,7 @@ private:
 public:
 	stopWatch();			// Class Constructor
 	~stopWatch();		// Class destructor
-	
+
 	void timeGo();		// Start the clock
 	void timeStop();		// Start the clock
 	double duration();	// Return the total duration

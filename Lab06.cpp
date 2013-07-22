@@ -40,6 +40,7 @@ using namespace std;
 		return 0;
 	}
 
+
 	bool data::addNew(string rawData) // IF parseCommas is run outside of this, then the param can be empty
 	{
 		// Iteratively read strips from the rawData
