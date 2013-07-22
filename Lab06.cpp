@@ -21,6 +21,7 @@ using namespace std;
 	{
 		string item;
 		getline(FILE,item);
+		addNew(item);
 		// Takes in the initialization file as input.
 		// Returns the length of the raw data string from the file, or zero on failure
 		return item;
@@ -77,9 +78,49 @@ using namespace std;
 		return temp;
 	}
 
-
+	//parseSpaces(string), parseCommas(string), readFile(istream)
+	//This doesn't make much sense right now
+	//I'm going to work on it more in VS to make sure what I'm thinking is legal...
+	//here's what I have so far -Tania
 	bool data::addNew(string rawData) // IF parseCommas is run outside of this, then the param can be empty
 	{
+		string line, movie, rating, director, actors, bySpace;
+		string mSpace, rSpace, dSpace, aSpace;
+		Vector<element> Movie, Rating, Director, Actor;
+		
+		movie = parseCommas(rawData);
+		rating = parseCommas(rawData);
+		director = parseCommas(rawData);
+		actors = parseCommas(rawData);
+		
+		while(bySpace != '0')
+		{
+			bySpace = parseSpaces(movie);
+			Movie.push_back(element(bySpace));
+			//build movie vector
+			//set pointers
+		}	
+		while(bySpace != '0')
+		{
+			bySpace = parseSpaces(director);
+			Director.push_back(element(bySpace));
+			//build director vector
+			//set pointers
+		}
+			
+		while(bySpace != '0')
+		{
+			bySpace = parseSpaces(actors);
+			Actor.push_back(element(bySpace));
+			//build actors vector
+			//set pointers
+		}
+		
+		bySpace = parseSpaces(rating);
+		Rating.push_back(element(bySpace));
+		//build rating vector
+		//set pointers
+		
 		// Iteratively read strips from the rawData
 		/* For each category/strip read :
 		 * 1) Search for spot in kindList for data element
@@ -87,7 +128,7 @@ using namespace std;
 		 * 3) Link element.MoviePtr -> Movie
 		 */
 		// Return 0 if fail; 1 if success
-		return 0;
+		return true;
 	}
 
 	data::indexPtr data::binarySearch(kindList list, string search_term)
