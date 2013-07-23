@@ -9,49 +9,122 @@ using namespace std;
 // Class constructor
 	data::data()
 	{
-
-
+		comma = 0; //initialize counters -Tania	
+		space = 0;
 
 	}
-
+	
 
 	// Class destructor
 	data::~data()
 	{
 
 	}
-
-	int data::readFile(streambuf FILE)
+	//takes in the file and reads the first line and returns the string -Tania
+	string data::readFile(istream& FILE)
 	{
 		string item;
 		getline(FILE,item);
-		parseCommas(item);
+		addNew(item);
 		// Takes in the initialization file as input.
 		// Returns the length of the raw data string from the file, or zero on failure
-		return 0;
+		return item;
 	}
-
+	//takes string from readFile and parses it by commas -Tania
+	//checks to see next charachter in string is a space if it is it fixes comma
+	//then it copies the strung into a temp up until the first comma 
+	//then it increase the count and returns the parsed string
 	string data::parseCommas(string rawData)
 	{
-		int i=0;
-		string pos = rawData.at(i), temp;
-		while(!rawData.end())
+		if(rawdata.at(comma) == ' ')
+			comma += 1;
+		else if(rawData.at(comma) == '\0')
 		{
-			if(rawData.at(i) == ' ')
-			{
-				//temp = 
-			}
-			i++;
+			comma = 0;
+			return "0";
 		}
+		string temp;
+		while(rawData.at(comma) != ',' && rawData.at(comma) != '\0')
+		{
+			temp.at(comma) = rawData.at(comma);
+			comma++;
+		}
+		comma++;
+		return temp;
+		/*
+		if(rawData.at(amount) == ' ')
+			rawData.erase(pos,amount+1);
+		else 
+			rawData.erase(pos,amount);*/
 		// Read raw data string up to first comma
 		// Return string with leading/trailing whitespace stripped
 		// Repeat until string.end()
-		return 0;
+	}
+	//takes in string parsed by the parseComma fnt and parses it by spaces -Tania
+	//this does the exact same thing as parseComma except it parses it at the spaces
+	string data::parseSpaces(string rawData)
+	{
+		if(rawData.at(space) == ' ')
+			space += 1;
+		else if(rawData.at(space) == '\0')
+		{
+			space = 0;
+			return "0"; //or we can say while string.at(string.length()) != comma in addnew function
+		}
+		string temp;
+		while(rawData.at(space) != ' ' && rawData.at(space) != '\0')
+		{
+			temp.at(space) = rawData.at(space);
+			space++;
+		}
+		//rawData.erase(pos,i);
+		space++;
+		return temp;
 	}
 
-
+	//parseSpaces(string), parseCommas(string), readFile(istream)
+	//This doesn't make much sense right now
+	//I'm going to work on it more in VS to make sure what I'm thinking is legal...
+	//here's what I have so far -Tania
 	bool data::addNew(string rawData) // IF parseCommas is run outside of this, then the param can be empty
 	{
+		string line, movie, rating, director, actors, bySpace;
+		string mSpace, rSpace, dSpace, aSpace;
+		Vector<element> Movie, Rating, Director, Actor;
+		
+		movie = parseCommas(rawData);
+		rating = parseCommas(rawData);
+		director = parseCommas(rawData);
+		actors = parseCommas(rawData);
+		
+		while(bySpace != '0')
+		{
+			bySpace = parseSpaces(movie);
+			Movie.push_back(element(bySpace));
+			//build movie vector
+			//set pointers
+		}	
+		while(bySpace != '0')
+		{
+			bySpace = parseSpaces(director);
+			Director.push_back(element(bySpace));
+			//build director vector
+			//set pointers
+		}
+			
+		while(bySpace != '0')
+		{
+			bySpace = parseSpaces(actors);
+			Actor.push_back(element(bySpace));
+			//build actors vector
+			//set pointers
+		}
+		
+		bySpace = parseSpaces(rating);
+		Rating.push_back(element(bySpace));
+		//build rating vector
+		//set pointers
+		
 		// Iteratively read strips from the rawData
 		/* For each category/strip read :
 		 * 1) Search for spot in kindList for data element
@@ -59,7 +132,7 @@ using namespace std;
 		 * 3) Link element.MoviePtr -> Movie
 		 */
 		// Return 0 if fail; 1 if success
-		return 0;
+		return true;
 	}
 
 	data::indexPtr data::binarySearch(kindList list, string search_term)
@@ -94,7 +167,7 @@ using namespace std;
 		startTime = 0;
 		stopTime = 0;
 	}
-	stopWatch::~stopWatch()			// Class destructor
+	stopWatch::~stopWatch()		// Class destructor
 	{
 		delete &startTime;
 		delete &stopTime;
