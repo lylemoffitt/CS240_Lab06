@@ -161,13 +161,12 @@ using namespace std;
 			space = 0;
 			return "0"; //or we can say while string.at(string.length()) != comma in addnew function
 		}
-		string temp;
-		int TEMP=0;
+		string temp, TEMP;
 		while(rawData.at(space) != ' ' && rawData.at(space) != ',' && rawData.at(comma) != '\0')
 		{
-			temp.at(TEMP) = rawData.at(space);
-			TEMP++;
-			space++;
+			TEMP = rawData.at(comma);
+			temp.append(TEMP);
+			comma++;
 		}
 		//rawData.erase(pos,i);
 		space++;
@@ -176,14 +175,13 @@ using namespace std;
 
 	string data::parseActors(string rawData)
 	{
-		string temp;
-		int TEMP=0;
+		string temp, TEMP=0;
 
 		while(rawData.at(space) != '\0')
 		{
-			temp.at(TEMP) = rawData.at(space);
-			TEMP++;
-			space++;
+			TEMP = rawData.at(comma);
+			temp.append(TEMP);
+			comma++;
 		}
 		return temp;
 	}
