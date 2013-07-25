@@ -1,7 +1,3 @@
-//Ok so here is what I have so far. I'm sorry it took me so long to post. I got caught up trying to fix my runtime errors. 
-//They're still not fixed. I'm having trouble with linking the pointer in the struct in each vector indext to the movie
-//it matches to. 
-
 #ifndef IMDB_H
 #define IMDB_H
 
@@ -12,12 +8,11 @@
 #include <time.h>
 #include <sstream>
 #include <algorithm>
-//#include <iterator>
 
 class data
 {
 private:
-  struct element
+	struct element
 	{
 		std::string Name;	// The name of the element (Title, Rating, Director, Actor)
 		typedef element* MoviePtr;		// A pointer to the movie that this was in
@@ -49,6 +44,9 @@ public:
 	~data();	// Class destructor
 
 	void Display();
+	bool compareElem(element ONE, element TWO);
+	void sortElem();
+	//friend bool operator< (vector<element>& lhs, vector<element>& rhs);
 	std::string readFile(std::istream& FILE);
 	std::string parseCommas(std::string rawData);
 	std::string parseSpaces(std::string rawData);
