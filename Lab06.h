@@ -22,6 +22,10 @@ private:
 			Name = theName;
 			link = nullptr;
 		}
+		~element()
+		{
+
+		}
 
 	};
 	 //there's error for the 'theName'
@@ -44,8 +48,7 @@ public:
 	~data();	// Class destructor
 
 	void Display();
-	bool compareElem(element ONE, element TWO);
-	void sortElem();
+	int SORT(std::vector<element> obj, std::string rawData);
 	//friend bool operator< (vector<element>& lhs, vector<element>& rhs);
 	std::string readFile(std::istream& FILE);
 	std::string parseCommas(std::string rawData);
@@ -68,7 +71,7 @@ private:
 public:
 	stopWatch();			// Class Constructor
 	~stopWatch();		// Class destructor
-	
+
 	void timeGo();		// Start the clock
 	void timeStop();		// Start the clock
 	double duration();	// Return the total duration

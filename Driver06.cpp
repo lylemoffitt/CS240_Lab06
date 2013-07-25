@@ -3,12 +3,12 @@ using namespace std;
 
 int main()
 {
-    data Hello;
+	data Hello;
 	ifstream file("imdbTest.txt");
 	Hello.readFile(file);
-	Hello.Display();
+	//Hello.Display();
 	srand(time(0));
-	/*
+
 	string str1 = "ABCD", str2 = "EFGH";
 	cout << "str1: " << str1 << endl << "str2: " << str2 << endl;
 	cout << "str1.compare(str2): " << str1.compare(str2) << endl;

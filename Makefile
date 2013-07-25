@@ -1,42 +1,25 @@
 # Final Compiled Executable
-    NAME	:= imdb
-    COMPILER	:= g++-4.8
-    OPTIONS	:= -Wall -Wextra -Weffc++
-    FLAGS	:= -v -std=c++11
+    NAME	:=  imdb
+    COMPILER	:=  g++-4.8 # Change if you have a different compiler or version of GCC
+    OPTIONS	:=  -Wall -Wextra -Weffc++
+    FLAGS	:=  -v -std=c++11
 
-###  C    ###
-# Sources, Headers, and Objects
-    C_SRCS	:= $(*.c)
-    C_HDRS	:= $(*.h)
+    CC_THIS	:= $(COMPILER) $(OPTIONS) $(FLAGS) -o
 
-    C_OBJS	:= ${C_SRCS:.c=.o}
+all	:   $(NAME)
 
-
-###  C++  ###
-# Sources, Headers, Templates, and Objects
-    CXX_SRCS	:= $(*.cpp)
-    CXX_HDRS	:= $(*.hh) $(C_HDRS)
-    CXX_TMPL	:= $(*.cc)
-
-    CXX_OBJS	:= ${CXX_SRCS:.cpp=.o}
+${%.cc:.cc=.o}	:   ${%.cpp %.h %.cc}
+	$(CC_THIS) ${%.o}
+${%.h:.h=.o}	:   ${%.cpp %.h}
+	$(CC_THIS) ${%.o}
+${%.cpp:.cpp=.o}:   ${%.cpp}
+	$(CC_THIS) ${%.o}
 
 
-# Put both lists together
-    ALL_OBJS	:= $(C_OBJS) $(CXX_OBJS)
-
-.PHONY: all clean
-
-all: $(NAME)
-    $(NAME)	: $(ALL_OBJS)
-
-    %C_OBJS	:= %C_SRCS %C_HDRS
-    %CXX_OBJS	:= %CXX_SRCS %CXX_HDRS %CXX_TMPL
+$(NAME)	:   ${*.o}
+	$(CC_THIS) $(NAME)
 
 
 clean:
-#     $(RM) ./$(NAME)
-#     $(RM) ./$(ALL_OBJS)
-
-
-
-
+	- rm ./$(NAME)
+	- rm ./$(ALL_OBJS)

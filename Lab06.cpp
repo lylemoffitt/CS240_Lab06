@@ -5,7 +5,7 @@ using namespace std;
 // Class constructor
 	data::data()
 	{
-		comma = 0;
+		comma = 0; //initialize counters -Tania
 		space = 0;
 		m=0;
 		d=0;
@@ -14,14 +14,14 @@ using namespace std;
 		M=0;
 
 	}
-	
+
 
 	// Class destructor
 	data::~data()
 	{
 
 	}
-
+	//takes in the file and reads the first line and returns the string -Tania
 	string data::readFile(istream& FILE)
 	{
 		string item;
@@ -32,12 +32,15 @@ using namespace std;
 			getline(FILE, item);
 			addNew(item);
 		}
-		sortElem();
+		//SORT();
 		// Takes in the initialization file as input.
 		// Returns the length of the raw data string from the file, or zero on failure
 		return item;
 	}
-
+	//takes string from readFile and parses it by commas -Tania
+	//checks to see next charachter in string is a space if it is it fixes comma
+	//then it copies the strung into a temp up until the first comma
+	//then it increase the count and returns the parsed string
 	string data::parseCommas(string rawData)
 	{
 		if(rawData.at(comma) == rawData.size())
@@ -59,18 +62,19 @@ using namespace std;
 		return temp;
 		/*if(rawData.at(comma) == '\0')
 			return "0";
-		else 
+		else
 			return temp;
 		/*
 		if(rawData.at(amount) == ' ')
 			rawData.erase(pos,amount+1);
-		else 
+		else
 			rawData.erase(pos,amount);*/
 		// Read raw data string up to first comma
 		// Return string with leading/trailing whitespace stripped
 		// Repeat until string.end()
 	}
-	
+	//takes in string parsed by the parseComma fnt and parses it by spaces -Tania
+	//this does the exact same thing as parseComma except it parses it at the spaces
 	string data::parseSpaces(string rawData)
 	{
 		if(space == rawData.size())
@@ -123,7 +127,7 @@ using namespace std;
 		while(i < rawData.size())
 		{
 			rawData.at(i) = toupper(rawData.at(i));
-			i++;   
+			i++;
 		}
 		return rawData;
 	}
@@ -136,7 +140,7 @@ using namespace std;
 		vector<element>:: iterator it;
 		movie = parseCommas(rawData);
 		theMovies.push_back(element(movie));
-		
+
 		rating = parseCommas(rawData);
 		director = parseCommas(rawData);
 		actors = parseActors(rawData);
@@ -146,22 +150,21 @@ using namespace std;
 		{
 			//toupper byspace
 			bySpace = stringToupper(bySpace);
-			//compare = compare(Movie, bySpace);
-			//if(compare == 0)
+			compare = SORT(Movie, bySpace);
+			if(compare == 0)
 				Movie.push_back(element(bySpace));
-			//use size() for linking purposes
-			//else 
-			//{
-				//////***help***////////
-			//	it = &Movie[compare];
-			//	Movie.insert(Movie[compare], element(bySpace));
-			//}
+			else
+			{
+				//***in progress***//
+				it = &Movie[compare];
+				Movie[compare].insert(element(bySpace));
+			}
 			Movie[m].link = theMovies[M].link;
 			m++;
 			bySpace = parseSpaces(movie);
 			//build movie vector
 			//set pointers
-		}	
+		}
 
 		bySpace = parseSpaces(director);
 		while(bySpace != "0")
@@ -175,7 +178,7 @@ using namespace std;
 			//build director vector
 			//set pointers
 		}
-		
+
 		bySpace = parseSpaces(actors);
 		while(bySpace != "0")
 		{
@@ -194,8 +197,8 @@ using namespace std;
 		Rating[r].link = theMovies[M].link;
 		r++;
 		M++;
-		
-		
+
+
 		//build rating vector
 		//set pointers
 
@@ -209,37 +212,24 @@ using namespace std;
 		return true;
 	}
 
-	bool data::compareElem(element ONE, element TWO)
-	{ 
-
-		//int i=0;
-		/*while( i < obj.size())
-		{*/
-			if(ONE.Name.empty() || TWO.Name.empty())
-				return false;
-			else if(ONE.Name.compare(TWO.Name) == 0)
-				return false;
-			else if(ONE.Name.compare(TWO.Name) < 0)
-				return false;
-			else if(ONE.Name.compare(TWO.Name) > 0)
-				return true;
-			/*else 
-				return 0;
-		}*/
-		//return (ONE.Name.compare(TWO.Name));
-	}
-
-	void data::sortElem()
+	int data::SORT(vector<element> obj, string rawData)
 	{
-		//sorting Movie
-		//int k = Movie.size();
-		sort(Movie.begin(), Movie.end(),&data::compareElem);
-		sort(Director.begin(), Director.end(),&data::compareElem);
-		sort(Rating.begin(), Rating.end(),&data::compareElem);
-		sort(Actor.begin(), Actor.end(),&data::compareElem);
-		//sorting director
-	}
+		sort
 
+//		int i=0;
+//		while( i < obj.size())
+//		{
+//			if(obj[i].Name.compare(rawData) == 0)
+//				return i;
+//			else if(obj[i].Name.compare(rawData) == -1)
+//				i++;
+//			else if(obj[i].Name.compare(rawData) == 1)
+//				return i-1;
+//			else
+//				return 0;
+//		}
+		return 0;
+	}
 
 	void data::Display()
 	{
@@ -339,6 +329,25 @@ using namespace std;
 
 
 
-	/*
-		
-		*/
+
+		//sorting Movie
+		int k = Movie.size();
+		string *first = &Movie[0].Name;
+		string *last = &Movie[Movie.size()-1].Name;
+		sort(first, last);
+		//sorting director
+		k = Director.size();
+		first = &Director[0].Name;
+		last = &Director[Director.size()-1].Name;
+		sort(first, last);
+		//sorting actor
+		k = Actor.size();
+		first = &Actor[0].Name;
+		last = &Actor[Actor.size()-1].Name;
+		sort(first, last);
+		//sorting rating
+		k = Rating.size();
+		first = &Rating[0].Name;
+		last = &Rating[Rating.size()-1].Name;
+		sort(first, last);
+
