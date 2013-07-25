@@ -16,17 +16,18 @@ private:
 	{
 		std::string Name;	// The name of the element (Title, Rating, Director, Actor)
 		typedef element* MoviePtr;		// A pointer to the movie that this was in
-		MoviePtr link;
+		MoviePtr Link;
+
 		element(std::string theName)
 		{
 			Name = theName;
-			link = nullptr;
+			Link = nullptr;
 		}
 		~element()
 		{
-
+			delete Name;
+			delete Link;
 		}
-
 	};
 	 //there's error for the 'theName'
 	typedef element* indexPtr;
@@ -48,6 +49,7 @@ public:
 	~data();	// Class destructor
 
 	void Display();
+	kindList data::getKind(category group);
 	int SORT(std::vector<element> obj, std::string rawData);
 	//friend bool operator< (vector<element>& lhs, vector<element>& rhs);
 	std::string readFile(std::istream& FILE);
@@ -56,7 +58,7 @@ public:
 	std::string parseActors(std::string rawData);
 	std::string stringToupper(std::string rawData);
 	bool addNew(std::string rawData); // IF parseCommas is run outside of this, then the param can be empty
-	indexPtr binarySearch(kindList list, std::string search_term);
+	int binarySearch(kindList list, std::string search_term);
 	bool getMatch(category group, std::string sub_string);
 	void printMatch(element::MoviePtr titleName);
 

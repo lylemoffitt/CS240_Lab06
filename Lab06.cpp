@@ -159,7 +159,7 @@ using namespace std;
 				it = &Movie[compare];
 				Movie[compare].insert(element(bySpace));
 			}
-			Movie[m].link = theMovies[M].link;
+			Movie[m].Link = theMovies[M].Link;
 			m++;
 			bySpace = parseSpaces(movie);
 			//build movie vector
@@ -172,7 +172,7 @@ using namespace std;
 			//toupper byspace
 			bySpace = stringToupper(bySpace);
 			Director.push_back(element(bySpace));
-			Director[d].link = theMovies[M].link;
+			Director[d].Link = theMovies[M].Link;
 			d++;
 			bySpace = parseSpaces(director);
 			//build director vector
@@ -185,7 +185,7 @@ using namespace std;
 			//toupper byspace
 			bySpace = stringToupper(bySpace);
 			Actor.push_back(element(bySpace));
-			Actor[a].link = theMovies[M].link;
+			Actor[a].Link = theMovies[M].Link;
 			a++;
 			bySpace = parseSpaces(actors);
 			//build actors vector
@@ -194,7 +194,7 @@ using namespace std;
 
 		bySpace = parseSpaces(rating);
 		Rating.push_back(element(bySpace));
-		Rating[r].link = theMovies[M].link;
+		Rating[r].Link = theMovies[M].Link;
 		r++;
 		M++;
 
@@ -253,7 +253,7 @@ using namespace std;
 		cout << endl;
 	}
 
-	data::indexPtr data::binarySearch(kindList list, string search_term)
+	int data::binarySearch(kindList list, string search_term)
 	{
 		int i;
 		int bottom = 0, top = 0, middle = 0, found = 0;
@@ -274,9 +274,9 @@ using namespace std;
 		}
 
 		if(found == 1)
-			return list[i].link;
+			return i;
 		else
-			return nullptr;
+			return -1;
 		// This could be potentially be replaced by std::binary_search from the algorithm library
 		// .. though, i don't know how easily we can adapt that to our needs
 		// Use std::string.compare() to determine break direction.
@@ -284,9 +284,30 @@ using namespace std;
 		// Return an indexPtr to the first matching element or nullptr if not found
 		return 0;
 	}
+	data::kindList data::getKind(category group)
+	{
+		switch( group )
+		{
+			case T:
+				return Movie;
+			case R:
+				return Rating;
+			case D:
+				return Director;
+			case S:
+				return Actor;
+			default:
+				return theMovies;
+		}
+	}
 
 	bool data::getMatch(category group, string sub_string)
 	{
+		int found = binarySearch(getKind(group),sub_string);
+		if(found == -1) { return false;}
+		while(found)
+
+
 		// Use binarySearch to find first match
 		// Use linear search up, and then down the block to find all possible adjacent matches
 		// printMatch() for each match found
