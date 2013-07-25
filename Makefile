@@ -1,5 +1,8 @@
 # Final Compiled Executable
     NAME	:= imdb
+    COMPILER	:= g++-4.8
+    OPTIONS	:= -Wall -Wextra -Weffc++
+    FLAGS	:= -v -std=c++11
 
 ###  C    ###
 # Sources, Headers, and Objects
@@ -24,15 +27,15 @@
 .PHONY: all clean
 
 all: $(NAME)
-    $(NAME)	:= $(ALL_OBJS)
+    $(NAME)	: $(ALL_OBJS)
 
     %C_OBJS	:= %C_SRCS %C_HDRS
     %CXX_OBJS	:= %CXX_SRCS %CXX_HDRS %CXX_TMPL
 
 
 clean:
-    @- $(RM) $(NAME)
-    @- $(RM) $(ALL_OBJS)
+#     $(RM) ./$(NAME)
+#     $(RM) ./$(ALL_OBJS)
 
 
 
