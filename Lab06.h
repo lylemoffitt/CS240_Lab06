@@ -16,18 +16,13 @@ private:
 	{
 		std::string Name;	// The name of the element (Title, Rating, Director, Actor)
 		typedef element* MoviePtr;		// A pointer to the movie that this was in
-		MoviePtr Link;
-
+		MoviePtr link;
 		element(std::string theName)
 		{
 			Name = theName;
-			Link = nullptr;
+			link = nullptr;
 		}
-		~element()
-		{
-			delete Name;
-			delete Link;
-		}
+
 	};
 	 //there's error for the 'theName'
 	typedef element* indexPtr;
@@ -49,18 +44,20 @@ public:
 	~data();	// Class destructor
 
 	void Display();
-	kindList getKind(category group);
-	int SORT(std::vector<element> obj, std::string rawData);
-	//friend bool operator< (vector<element>& lhs, vector<element>& rhs);
+	bool compareElem(element ONE, element TWO);
+	void sortElem();
+	friend bool operator< (const element& ONE, const element& TWO);
 	std::string readFile(std::istream& FILE);
 	std::string parseCommas(std::string rawData);
 	std::string parseSpaces(std::string rawData);
 	std::string parseActors(std::string rawData);
 	std::string stringToupper(std::string rawData);
-	bool addNew(std::string rawData); // IF parseCommas is run outside of this, then the param can be empty
+	bool addNew(std::string rawData); 
 	int binarySearch(kindList list, std::string search_term);
-	bool getMatch(category group, std::string sub_string);
-	void printMatch(element::MoviePtr titlePtr);
+	bool getMatch();
+	kindList getKind(char group);
+	void getKind(char group, int found, std::string keyword);
+	void printMatch(element::MoviePtr titleName);
 
 };
 
@@ -73,7 +70,7 @@ private:
 public:
 	stopWatch();			// Class Constructor
 	~stopWatch();		// Class destructor
-
+	
 	void timeGo();		// Start the clock
 	void timeStop();		// Start the clock
 	double duration();	// Return the total duration
