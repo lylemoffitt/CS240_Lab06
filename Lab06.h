@@ -5,7 +5,7 @@
 #include <string>
 #include <iostream>
 #include <fstream>
-#include <time.h>
+#include <chrono>
 #include <sstream>
 #include <algorithm>
 
@@ -25,8 +25,7 @@ private:
 
 	};
 	 //there's error for the 'theName'
-	//typedef element* indexPtr;
-	typedef element::MoviePtr indexPtr;
+	typedef element* indexPtr;
 	typedef std::vector<element> kindList; // The vector of each category list
 	kindList Movie, Rating, Director, Actor, theMovies;
 	int m,r,d,a, M;
@@ -65,8 +64,8 @@ public:
 class stopWatch // Time object
 {
 private:
-	time_t startTime;
-	time_t stopTime;
+	long startTime;
+	long stopTime;
 
 public:
 	stopWatch();			// Class Constructor
@@ -74,7 +73,7 @@ public:
 	
 	void timeGo();		// Start the clock
 	void timeStop();		// Start the clock
-	double duration();	// Return the total duration
+	long duration();	// Return the total duration
 
 };
 
