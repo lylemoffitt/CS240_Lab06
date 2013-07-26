@@ -43,6 +43,7 @@ bool operator< (const data::element& ONE, const data::element& TWO)
 //takes in the file and reads the first line and returns the string -Tania
 	string data::readFile(istream& FILE)
 	{
+	stopWatch timer;
 		string item;
 		while(!FILE.eof())
 		{
@@ -380,6 +381,64 @@ void data::fetch()
 		lineStr = stringToupper(lineStr);
 		timer.timeGo();//Start clock
 		getMatches(lineStr);
+
+	} while (lineStr != "EXIT");//if -then-> return;
+}
+
+bool data::getMatches(/*category group,*/ string lineStr)
+{
+	vector<element::MoviePtr> vecTemp;//Temp vector to hold reverences for all elements that match
+	element::MoviePtr Temp;//Temp Ptr to the matching element
+	int found=0;
+	//Iniiialize
+	string  keyword;
+	char cat;
+	int i=0,k_num=0;
+
+	//Parse Category
+	i = lineStr.find_first_of("TRDS",0);
+	char = lineStr.at(i);
+	lineStr.erase(0,i);
+
+	//Parse remaining keywords
+	while(lineStr.find_first_of(' ',0) < lineStr.end() )
+	{
+		// Use binarysearch to find first match
+		// Use linear search up, and then down to find all possible adjacent matches
+		i = lineStr.find_first_of(' ',0);
+		keyword.copy(lineStr,i,0);
+		lineStr.erase(0,i);
+		//k_num=0 --> Populate initial match-list
+		//k_num>0 --> Remove non-matches
+		found = binarySearch(getKind(cat),lineStr);//found matching index #
+		if(found == -1) { return false;}// -1 = "No match found"
+		Temp = &getKind(cat).at(found);//Copy elemtent reference to temp
+		for( int l=0, k[2]={1,-1}; l<2 ; ++l )//Initialize mode counter, and mode list
+		{
+			for( int j=k[l]; Temp->Name.compare(lineStr)  ;//Check for match
+				 j+=k[l], Temp = &getKind(cat).at(found+j) )//Get next element
+			{
+				for( int i=0; i <= vecTemp.size(); ++i )//If found, check for dublicate in vecTemp
+				{
+					if( Temp == vecTemp[i] ){
+						if(k_num==0){ break; //If duplicate, skip and get next (FAST Initialize)
+						} else{ continue; }//If it matched go to the next and check it.
+					} else if( (i==vecTemp.size()) && //If end of list is reached without match
+							   (k_num==0) ){//AND this is the first keyword
+						vecTemp.push_back(Temp->link);//Then append reference to vector
+					} else {//IF the pointer does not match, and it is not the first word
+						vecTemp.erase(vecTemp.begin() +i);//Remove that
+					}
+				}
+			}
+		}
+	}
+	if (vecTemp.empty()){	return false;	} //False for no matches or conflicting keywords
+
+
+
+
+}
 
 	bool data::getMatch()
 	{
