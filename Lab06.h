@@ -30,7 +30,8 @@ private:
 		}
 	};
 	 //there's error for the 'theName'
-	typedef element* indexPtr;
+	//typedef element* indexPtr;
+	typedef element::MoviePtr indexPtr;
 	typedef std::vector<element> kindList; // The vector of each category list
 	kindList Movie, Rating, Director, Actor, theMovies;
 	int m,r,d,a, M;
