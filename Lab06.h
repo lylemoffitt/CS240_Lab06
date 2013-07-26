@@ -1,3 +1,4 @@
+//header file
 #ifndef IMDB_H
 #define IMDB_H
 
@@ -5,9 +6,9 @@
 #include <string>
 #include <iostream>
 #include <fstream>
-#include <chrono>
 #include <sstream>
 #include <algorithm>
+#include <chrono>
 
 class data
 {
@@ -52,14 +53,12 @@ public:
 	std::string parseSpaces(std::string rawData);
 	std::string parseActors(std::string rawData);
 	std::string stringToupper(std::string rawData);
-	bool addNew(std::string rawData);
+	bool addNew(std::string rawData); // IF parseCommas is run outside of this, then the param can be empty
 	int binarySearch(kindList list, std::string search_term);
 	bool getMatch();
-	void fetch();
-	bool getMatches(std::string lineStr);
 	kindList getKind(char group);
 	void getKind(char group, int found, std::string keyword);
-	void printMatch(element::MoviePtr titleName);
+	void findRating(std::string firstBound, std::string search, int found);
 
 };
 
