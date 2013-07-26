@@ -49,7 +49,7 @@ public:
 	~data();	// Class destructor
 
 	void Display();
-	kindList data::getKind(category group);
+	kindList getKind(category group);
 	int SORT(std::vector<element> obj, std::string rawData);
 	//friend bool operator< (vector<element>& lhs, vector<element>& rhs);
 	std::string readFile(std::istream& FILE);
@@ -60,7 +60,7 @@ public:
 	bool addNew(std::string rawData); // IF parseCommas is run outside of this, then the param can be empty
 	int binarySearch(kindList list, std::string search_term);
 	bool getMatch(category group, std::string sub_string);
-	void printMatch(element::MoviePtr titleName);
+	void printMatch(element::MoviePtr titlePtr);
 
 };
 

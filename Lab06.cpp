@@ -303,18 +303,29 @@ using namespace std;
 
 	bool data::getMatch(category group, string sub_string)
 	{
+		vector<element::MoviePtr> vecTemp;
+		element Temp;
 		int found = binarySearch(getKind(group),sub_string);
 		if(found == -1) { return false;}
-		while(found)
+		do{
+			Temp = getKind(group).at(found);
+			if (Temp.Name == sub_string){
+				for( int i=0; vecTemp[i] >= vecTemp.end(); ++i )
+				{
+					if(vecTemp[i] == Temp){	break;	}
+
+				}
+
+			}
+		} while ( )
 
 
 		// Use binarySearch to find first match
 		// Use linear search up, and then down the block to find all possible adjacent matches
 		// printMatch() for each match found
-		return 0;
 	}
 
-	void data::printMatch(element::MoviePtr titleName)
+	void data::printMatch(element::MoviePtr titlePtr)
 	{
 		// Possibly print some header info
 		// Print out titleName->Name()
