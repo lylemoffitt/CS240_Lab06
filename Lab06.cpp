@@ -19,7 +19,7 @@ bool operator< (const data::element& ONE, const data::element& TWO)
 // Class constructor
 	data::data()
 	{
-		comma = 0;
+	comma = 0; //initialize counters -Tania
 		space = 0;
 		m=0;
 		d=0;
@@ -32,6 +32,15 @@ bool operator< (const data::element& ONE, const data::element& TWO)
 
 	// Class destructor
 	data::~data()
+{
+	Movie.clear();
+	delete &Movie;
+	Director.clear();
+	delete &Director;
+	Rating.clear();
+	delete &Rating;
+	Actor.clear();
+	delete &Actor;
 	{/*
 	//	Movie.clear();
 		delete Movie;
@@ -43,11 +52,12 @@ bool operator< (const data::element& ONE, const data::element& TWO)
 		delete Actor; 
 		delete theMovies;*/
 	}
-
+//takes in the file and reads the first line and returns the string -Tania
 	string data::readFile(istream& FILE)
 	{
+	stopWatch timer;
 		string item;
-		//getline(FILE, item);
+	timer.timeGo();
 		while(!FILE.eof())
 		{
 			comma = 0;
@@ -56,13 +66,21 @@ bool operator< (const data::element& ONE, const data::element& TWO)
 			if(!FILE.eof())
 				addNew(item);
 		}
+	timer.timeStop();
+	cout << timer.duration() << "ms to import" << endl;
 		Display();
 		sortElem();
+	timer.timeStop();
+	cout << timer.duration() << "ms to import & sort" << endl;
 		// Takes in the initialization file as input.
 		// Returns the length of the raw data string from the file, or zero on failure
+
 		return item;
 	}
-
+//takes string from readFile and parses it by commas -Tania
+//checks to see next charachter in string is a space if it is it fixes comma
+//then it copies the strung into a temp up until the first comma
+//then it increase the count and returns the parsed string
 	string data::parseCommas(string rawData)
 	{
 		if(rawData.at(comma) == rawData.size())
@@ -82,11 +100,13 @@ bool operator< (const data::element& ONE, const data::element& TWO)
 		}
 		comma++;
 		return temp;
+
 		// Read raw data string up to first comma
 		// Return string with leading/trailing whitespace stripped
 		// Repeat until string.end()
 	}
-
+//takes in string parsed by the parseComma fnt and parses it by spaces -Tania
+//this does the exact same thing as parseComma except it parses it at the spaces
 	string data::parseSpaces(string rawData)
 	{
 		if(space == rawData.size())
@@ -148,11 +168,10 @@ bool operator< (const data::element& ONE, const data::element& TWO)
 	bool data::addNew(string rawData) // IF parseCommas is run outside of this, then the param can be empty
 	{
 		string movie, rating, director, actors, bySpace;
-		int compare = 0;
-		vector<element>:: iterator it;
+	//vector<element>:: iterator it;
 		movie = parseCommas(rawData);
 		theMovies.push_back(element(movie));
-		//theMovies[M].link = &(theMovies[M]);
+	theMovies[M].link = &theMovies[M];
 
 		rating = parseCommas(rawData);
 		director = parseCommas(rawData);
@@ -161,12 +180,15 @@ bool operator< (const data::element& ONE, const data::element& TWO)
 		bySpace = parseSpaces(movie);
 		while(bySpace != "0")
 		{
+		//toupper byspace
 			bySpace = stringToupper(bySpace);
 			Movie.push_back(element(bySpace));
 			Movie[m].link = &theMovies[M];
-			//cout << Movie[m].link->Name << endl;
+		cout << Movie[m].link->Name<< endl; ///////////////////////////////////////////
 			m++;
 			bySpace = parseSpaces(movie);
+		//build movie vector
+		//set pointers
 		}
 
 		bySpace = parseSpaces(director);
@@ -215,6 +237,28 @@ bool operator< (const data::element& ONE, const data::element& TWO)
 		return true;
 	}
 
+bool data::compareElem(element ONE, element TWO)
+{
+
+	//int i=0;
+	/*while( i < obj.size())
+		{*/
+	if(ONE.Name.empty() || TWO.Name.empty())
+		return false;
+	else if(ONE.Name.compare(TWO.Name) == 0)
+		return false;
+	else if(ONE.Name.compare(TWO.Name) < 0)
+		return false;
+	else if(ONE.Name.compare(TWO.Name) > 0)
+		return true;
+	else
+		return false; //Fail on exception
+	/*else
+				return 0;
+		}*/
+	//return (ONE.Name.compare(TWO.Name));
+}
+
 	void data::sortElem()
 	{
 		//sorting Movie
@@ -258,6 +302,21 @@ bool operator< (const data::element& ONE, const data::element& TWO)
 		for(i=0;i<Actor.size();i++)
 			cout << Actor[i].link->Name << endl;
 		cout << endl;
+	for(int i=0;i<Movie.size();i++)
+		cout << i << " | " << Movie[i].Name << endl;
+	cout << endl;
+	for(int i=0;i<Rating.size();i++)
+		cout << i << " | " <<  Rating[i].Name << endl;
+	cout << endl;
+	for(int i=0;i<Director.size();i++)
+		cout << i << " | " <<  Director[i].Name << endl;
+	cout << endl;
+	for(int i=0;i<Actor.size();i++)
+		cout << i << " | " <<  Actor[i].Name << endl;
+	cout << endl;
+	for(int i=0;i<theMovies.size();i++)
+		cout << i << " | " <<  Actor[i].Name << endl;
+	cout << endl;
 	}
 
 	int data::binarySearch(kindList list, string search_term)
@@ -265,7 +324,7 @@ bool operator< (const data::element& ONE, const data::element& TWO)
 		int i;
 		int bottom = 0, top = 0, middle = 0, found = 0;
 		top = list.size();
-		//search_term = stringToupper(search_term);
+	search_term = stringToupper(search_term);
 		while(bottom <= top && found == 0)
 		{
 			middle = (top + bottom)/2;
@@ -367,6 +426,102 @@ bool operator< (const data::element& ONE, const data::element& TWO)
 				break;
 			}
 	}
+void data::fetch()
+{
+	stopWatch timer;
+	string lineStr;
+	do{//Read IN
+		cout << "Type Exit to stop lineString \nSearch: ";
+		getline(cin, lineStr);
+		lineStr = stringToupper(lineStr);
+		timer.timeGo();//Start clock
+		if (getMatches(lineStr)){
+			cout << "\nNOT found!\n" << endl;
+		}
+		timer.timeStop();
+		cout << timer.duration() << "ms to search" << endl;
+
+	} while (lineStr != "EXIT");//if -then-> return;
+}
+
+bool data::getMatches(/*category group,*/ string lineStr)
+{
+	vector<element::MoviePtr> vecTemp;//Temp vector to hold reverences for all elements that match
+	element::MoviePtr Temp;//Temp Ptr to the matching element
+	int found=0;
+	//Iniiialize
+	string  keyword,lastword;
+	char cat;
+	int i=0,k_num=0;
+	double rat1=0.0,rat2=10.0,ratComp;
+
+	//Parse Category
+	i = lineStr.find_first_of("TRDS",0);
+	cat = lineStr.at(i);
+	lineStr.erase(0,i);
+
+	//Parse remaining keywords
+	while(lineStr.find_first_of(" ",0) < lineStr.end() )
+	{
+		// Use binarysearch to find first match
+		// Use linear search up, and then down to find all possible adjacent matches
+		i = lineStr.find_first_of(" \n\0",0);
+		keyword = lineStr.substr(0,i);
+		lineStr.erase(0,i);
+		if(cat == 'R'){
+			char* spc;     // alias of size_t
+
+			rat1= strtod(lineStr.data(),&spc);
+			if(spc != '\0'){
+				rat2 = strtod(spc,NULL);
+			} else {
+				rat2=10.0;
+			}
+			lineStr.clear();
+		}
+		//k_num=0 --> Populate initial match-list
+		//k_num>0 --> Remove non-matches
+		found = binarySearch(getKind(cat),keyword);//found matching index #
+		if(found == -1) { return false;}// -1 = "No match found"
+		Temp = &(getKind(cat).at(found));//Copy elemtent reference to temp
+		for( int l=0, k[2]={-1,1}; l<2 ; ++l )//Initialize mode counter, and mode list
+		{
+			int j=k[l];
+			bool exit=true;
+			while(exit)
+			{
+				ratComp = strtod(Temp->Name.data(),NULL);
+				if ( (rat1<=ratComp && rat2>=ratComp)||
+					 (Temp->Name.compare(lineStr)==0 )	 ){  //Check for match
+				} else{	exit = false;	break; }
+				for( int i=0; i <= vecTemp.size(); ++i )//If found, check for dublicate in vecTemp
+				{
+					if( Temp == vecTemp[i] ){
+						if(k_num==0){ break; //If duplicate, skip and get next (FAST Initialize)
+						} else{ continue; }//If it matched go to the next and check it.
+					} else if( (i==vecTemp.size()) && //If end of list is reached without match
+							   (k_num==0) ){//AND this is the first keyword
+						vecTemp.push_back(Temp->link);//Then append reference to vector
+					} else {//IF the pointer does not match, and it is not the first word
+						vecTemp.erase(vecTemp.begin() +i);//Remove that
+					}
+				}
+				j+=k[l];
+				Temp = &(getKind(cat).at(found+j)) ;//Get next element
+			}
+		}
+	}
+	if (vecTemp.empty()){	return false;	} //False for no matches or conflicting keywords
+	for(int i=0; i<vecTemp.size(); ++i)
+	{
+		Temp = vecTemp[i];
+		cout << Temp->link << " ??is the same as?? ";
+		cout << ((indexPtr)vecTemp[i])->link->Name << endl;
+	}
+	return true; // DONE!!!!
+
+
+}
 
 	bool data::getMatch()
 	{
@@ -456,11 +611,11 @@ bool operator< (const data::element& ONE, const data::element& TWO)
 
 	void stopWatch::timeGo()		// Start the clock
 	{
-//		startTime = chrono::system_clock::now().time_since_epoch()/chrono::milliseconds(1);
+	startTime = chrono::system_clock::now().time_since_epoch() / chrono::milliseconds(1);
 	}
 	void stopWatch::timeStop()		// Start the clock
 	{
-//		stopTime = chrono::system_clock::now().time_since_epoch() / chrono::milliseconds(1);
+	stopTime = chrono::system_clock::now().time_since_epoch() / chrono::milliseconds(1);
 	}
 	long stopWatch::duration()	// Return the total duration
 	{

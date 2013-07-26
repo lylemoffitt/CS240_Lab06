@@ -56,6 +56,8 @@ public:
 	bool addNew(std::string rawData); // IF parseCommas is run outside of this, then the param can be empty
 	int binarySearch(kindList list, std::string search_term);
 	bool getMatch();
+	void fetch();
+	bool getMatches(std::string lineStr);
 	kindList getKind(char group);
 	void getKind(char group, int found, std::string keyword);
 	void findRating(std::string firstBound, std::string search, int found);
