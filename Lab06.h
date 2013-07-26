@@ -55,7 +55,8 @@ public:
 	bool addNew(std::string rawData);
 	int binarySearch(kindList list, std::string search_term);
 	bool getMatch();
-	bool getMatches(sting lineStr);
+	void fetch();
+	bool getMatches(std::string lineStr);
 	kindList getKind(char group);
 	void getKind(char group, int found, std::string keyword);
 	void printMatch(element::MoviePtr titleName);

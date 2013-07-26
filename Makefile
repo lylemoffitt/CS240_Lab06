@@ -1,3 +1,6 @@
+# Choce compiler
+    CCC	:= GCC#or LLVM
+
     USE_GCC	:=  g++-4.8 # Change if you have a different compiler or version of GCC
     GCC_OP	:=  -Wall -Wextra -Weffc++
 
@@ -10,7 +13,7 @@
     OPTIONS	:=  $($(CCC)_OP)
     FLAGS	:=  -std=c++11
 
-    CC_THIS	:= $(COMPILER) $(OPTIONS) $(FLAGS) -o
+    CC_THIS	:= $(COMPILER) $(OPTIONS) $(FLAGS)
 
 # List relevant files
     LS_CC	:= $(*.cc)
@@ -18,20 +21,21 @@
     LS_CPP	:= $(*.cpp)
 
 
-all:   $(LS_CC:.cc=.o) $(LS_H:.h=.o) $(LS_CPP:.cpp=.o)
+#all:   $(LS_CC:.cc=.o) $(LS_H:.h=.o) $(LS_CPP:.cpp=.o)
 
-${%.cc:%.cc=%.o}  :   ${%.cpp %.h %.cc}
-	$(CC_THIS) ${%.o}
-${%.h:%.h=%.o}    :   ${%.cpp %.h}
-	$(CC_THIS) ${%.o}
-${%.cpp:%.cpp=%.o}:   ${%.cpp}
-	$(CC_THIS) ${%.o}
+#${%.cc:%.cc=%.o}  :   ${%.cpp %.h %.cc}
+#	$(CC_THIS) ${%.o}
+#${%.h:%.h=%.o}    :   ${%.cpp %.h}
+#	$(CC_THIS) ${%.o}
+#${%.cpp:%.cpp=%.o}:   ${%.cpp}
+#	$(CC_THIS) ${%.o}
 
+all:  Driver06.o
 
-$(NAME)	:   ${*.o}
-	$(CC_THIS) $(NAME)
+Driver06.o :  Lab06.cpp Driver.cpp
+	$(CC_THIS) -c Lab06.cpp Driver.cpp -o $(NAME)
 
 
 clean:
 	- rm ./$(NAME)
-	- rm ./$(ALL_OBJS)
+	- rm ./$(Driver06.o)
