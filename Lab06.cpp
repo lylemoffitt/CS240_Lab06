@@ -1,11 +1,23 @@
 #include "Lab06.h"
 using namespace std;
 
+bool operator< (const data::element& ONE, const data::element& TWO)
+{
+	if(ONE.Name.empty() || TWO.Name.empty())
+		return false;
+	else if(ONE.Name.compare(TWO.Name) == 0)
+		return false;
+	else if(ONE.Name.compare(TWO.Name) < 0)
+		return true;
+	else if(ONE.Name.compare(TWO.Name) > 0)
+		return false;
+}
+
 //class data
 // Class constructor
 	data::data()
 	{
-		comma = 0; //initialize counters -Tania
+		comma = 0;
 		space = 0;
 		m=0;
 		d=0;
@@ -14,14 +26,14 @@ using namespace std;
 		M=0;
 
 	}
-
+	
 
 	// Class destructor
 	data::~data()
 	{
 
 	}
-	//takes in the file and reads the first line and returns the string -Tania
+
 	string data::readFile(istream& FILE)
 	{
 		string item;
@@ -32,15 +44,12 @@ using namespace std;
 			getline(FILE, item);
 			addNew(item);
 		}
-		//SORT();
+		sortElem();
 		// Takes in the initialization file as input.
 		// Returns the length of the raw data string from the file, or zero on failure
 		return item;
 	}
-	//takes string from readFile and parses it by commas -Tania
-	//checks to see next charachter in string is a space if it is it fixes comma
-	//then it copies the strung into a temp up until the first comma
-	//then it increase the count and returns the parsed string
+
 	string data::parseCommas(string rawData)
 	{
 		if(rawData.at(comma) == rawData.size())
@@ -62,19 +71,18 @@ using namespace std;
 		return temp;
 		/*if(rawData.at(comma) == '\0')
 			return "0";
-		else
+		else 
 			return temp;
 		/*
 		if(rawData.at(amount) == ' ')
 			rawData.erase(pos,amount+1);
-		else
+		else 
 			rawData.erase(pos,amount);*/
 		// Read raw data string up to first comma
 		// Return string with leading/trailing whitespace stripped
 		// Repeat until string.end()
 	}
-	//takes in string parsed by the parseComma fnt and parses it by spaces -Tania
-	//this does the exact same thing as parseComma except it parses it at the spaces
+	
 	string data::parseSpaces(string rawData)
 	{
 		if(space == rawData.size())
@@ -127,7 +135,8 @@ using namespace std;
 		while(i < rawData.size())
 		{
 			rawData.at(i) = toupper(rawData.at(i));
-			i++;
+
+			i++;   
 		}
 		return rawData;
 	}
@@ -140,7 +149,8 @@ using namespace std;
 		vector<element>:: iterator it;
 		movie = parseCommas(rawData);
 		theMovies.push_back(element(movie));
-
+		theMovies[M].link = &theMovies[M];
+		
 		rating = parseCommas(rawData);
 		director = parseCommas(rawData);
 		actors = parseActors(rawData);
@@ -150,21 +160,14 @@ using namespace std;
 		{
 			//toupper byspace
 			bySpace = stringToupper(bySpace);
-			compare = SORT(Movie, bySpace);
-			if(compare == 0)
-				Movie.push_back(element(bySpace));
-			else
-			{
-				//***in progress***//
-				it = &Movie[compare];
-				Movie[compare].insert(element(bySpace));
-			}
-			Movie[m].Link = theMovies[M].Link;
+			Movie.push_back(element(bySpace));
+			Movie[m].link = &theMovies[M];
+			cout << Movie[m].link->Name<< endl; ///////////////////////////////////////////
 			m++;
 			bySpace = parseSpaces(movie);
 			//build movie vector
 			//set pointers
-		}
+		}	
 
 		bySpace = parseSpaces(director);
 		while(bySpace != "0")
@@ -172,20 +175,20 @@ using namespace std;
 			//toupper byspace
 			bySpace = stringToupper(bySpace);
 			Director.push_back(element(bySpace));
-			Director[d].Link = theMovies[M].Link;
+			Director[d].link = theMovies[M].link;
 			d++;
 			bySpace = parseSpaces(director);
 			//build director vector
 			//set pointers
 		}
-
+		
 		bySpace = parseSpaces(actors);
 		while(bySpace != "0")
 		{
 			//toupper byspace
 			bySpace = stringToupper(bySpace);
 			Actor.push_back(element(bySpace));
-			Actor[a].Link = theMovies[M].Link;
+			Actor[a].link = &theMovies[M];
 			a++;
 			bySpace = parseSpaces(actors);
 			//build actors vector
@@ -194,11 +197,11 @@ using namespace std;
 
 		bySpace = parseSpaces(rating);
 		Rating.push_back(element(bySpace));
-		Rating[r].Link = theMovies[M].Link;
+		Rating[r].link = &theMovies[M];
 		r++;
 		M++;
-
-
+		
+		
 		//build rating vector
 		//set pointers
 
@@ -212,30 +215,38 @@ using namespace std;
 		return true;
 	}
 
-	int data::SORT(vector<element> obj, string rawData)
-	{
-		sort
+	bool data::compareElem(element ONE, element TWO)
+	{ 
 
-//		int i=0;
-//		while( i < obj.size())
-//		{
-//			if(obj[i].Name.compare(rawData) == 0)
-//				return i;
-//			else if(obj[i].Name.compare(rawData) == -1)
-//				i++;
-//			else if(obj[i].Name.compare(rawData) == 1)
-//				return i-1;
-//			else
-//				return 0;
-//		}
-		return 0;
+		//int i=0;
+		/*while( i < obj.size())
+		{*/
+			if(ONE.Name.empty() || TWO.Name.empty())
+				return false;
+			else if(ONE.Name.compare(TWO.Name) == 0)
+				return false;
+			else if(ONE.Name.compare(TWO.Name) < 0)
+				return false;
+			else if(ONE.Name.compare(TWO.Name) > 0)
+				return true;
+			/*else 
+				return 0;
+		}*/
+		//return (ONE.Name.compare(TWO.Name));
 	}
 
+	void data::sortElem()
+	{
+		sort(Movie.begin(), Movie.end());
+		sort(Director.begin(), Director.end());
+		sort(Rating.begin(), Rating.end());
+		sort(Actor.begin(), Actor.end());
+	}
+
+	
 	void data::Display()
 	{
-		//vector<element>::iterator it;
-		int i=0;
-		//for(it = Movie.begin(); it != Movie.end(); it++)
+		int i=0;	
 		for(i=0;i<Movie.size();i++)
 			cout << Movie[i].Name << endl;
 		cout << endl;
@@ -284,48 +295,165 @@ using namespace std;
 		// Return an indexPtr to the first matching element or nullptr if not found
 		return 0;
 	}
-	data::kindList data::getKind(category group)
+
+	data::kindList data::getKind(char group)
 	{
 		switch( group )
 		{
-			case T:
+			case 'T':
 				return Movie;
-			case R:
+			case 'R':
 				return Rating;
-			case D:
+			case 'D':
 				return Director;
-			case S:
+			case 'S':
 				return Actor;
 			default:
 				return theMovies;
 		}
 	}
 
-	bool data::getMatch(category group, string sub_string)
+	void data::getKind(char group, int found, string keyword)
 	{
-		vector<element::MoviePtr> vecTemp;
-		element Temp;
-		int found = binarySearch(getKind(group),sub_string);
-		if(found == -1) { return false;}
-		do{
-			Temp = getKind(group).at(found);
-			if (Temp.Name == sub_string){
-				for( int i=0; vecTemp[i] >= vecTemp.end(); ++i )
-				{
-					if(vecTemp[i] == Temp){	break;	}
-
-				}
-
+		int i=0;
+		do
+		{
+			switch( group )
+			{
+				case 'T':
+					i = found;
+					while(Movie[i].Name == keyword)
+					{
+						cout << Movie[i].link->Name << endl;
+						i++;
+					}
+					i = found;
+					while(Movie[i].Name == keyword)
+					{
+						cout << Movie[i].link->Name << endl;
+						i--;
+					}
+					break;
+				case 'D':
+					i = found;
+					while(Director[i].Name == keyword)
+					{
+						cout << Director[i].link->Name << endl;
+						i++;
+					}
+					i = found;
+					while(Director[i].Name == keyword)
+					{
+						cout << Director[i].link->Name << endl;
+						i--;
+					}
+					break;
+				case 'S':
+					i = found;
+					while(Actor[i].Name == keyword)
+					{
+						cout << Actor[i].link->Name << endl;
+						i++;
+					}
+					i = found;
+					while(Actor[i].Name == keyword)
+					{
+						cout << Actor[i].link->Name << endl;
+						i--;
+					}
+					break;
+				default:
+					cout << "Error, Stopping compilation.\n";
+					break;
 			}
-		} while ( )
+		} while(i == 0);
+	}
 
+	bool data::getMatch()
+	{
+		string search, keyword;
+		char cat;
+		kindList temp;
+		int found = 0, i=0;
+		cout << "Type Exit to stop searching \nSearch: ";
+		getline(cin, search);
+		search = stringToupper(search);
+		while(search != "EXIT")
+		{
+			cat = search.at(0);
+			if(search.at(1) == ' ')
+				search.erase(0,2);
+			else 
+				search.erase(0,1);
+			space = 0;
+			keyword = parseSpaces(search);
+			while(keyword != "0")
+			{
+				found = binarySearch(getKind(cat), keyword);
+				if(found == -1) 
+					return false;
+				if(cat == 'R')
+				{
+					string endBound;
+					endBound = parseSpaces(search);
+					if(endBound == "0")
+						endBound = "10.0";
+					i = found;
+					while(Rating[i].Name == keyword)
+					{
+						cout << Rating[i].link->Name << endl;
+						i--;
+					}
+					i = found;
+					do{
+						cout << Rating[i].link->Name << endl;
+						i++;
+					} while(Rating[i].Name != endBound);
+					while(Rating[i].Name == endBound)
+						cout << Rating[i].link->Name << endl;
+				}
+				else
+					getKind(cat, found, keyword);
+				keyword = parseSpaces(search);
+			}
+			getline(cin, search);
+			search = stringToupper(search);
+		}
 
 		// Use binarySearch to find first match
 		// Use linear search up, and then down the block to find all possible adjacent matches
 		// printMatch() for each match found
+		return 0;
 	}
-
-	void data::printMatch(element::MoviePtr titlePtr)
+	/*
+	bool data::getMatch(category group, string sub_string)
+   {
++    vector<element::MoviePtr> vecTemp;
++    element Temp;
+     int found = binarySearch(getKind(group),sub_string);
+     if(found == -1) { return false;}
+-    while(found)
++    do{
++      Temp = getKind(group).at(found);
++      if (Temp.Name == sub_string){
++        for( int i=0; vecTemp[i] >= vecTemp.end(); ++i )
++        {
++          if(vecTemp[i] == Temp){  break;  }
++
++        }
++
++      }
++    } while ( )
+ 
+ 
+     // Use binarySearch to find first match
+     // Use linear search up, and then down the block to find all possible adjacent matches
+     // printMatch() for each match found
+-    return 0;
+   }
+ 
+	*/
+	void data::printMatch(element::MoviePtr titleName)
 	{
 		// Possibly print some header info
 		// Print out titleName->Name()
@@ -359,27 +487,4 @@ using namespace std;
 		return difftime(startTime,stopTime);
 	}
 
-
-
-
-		//sorting Movie
-		int k = Movie.size();
-		string *first = &Movie[0].Name;
-		string *last = &Movie[Movie.size()-1].Name;
-		sort(first, last);
-		//sorting director
-		k = Director.size();
-		first = &Director[0].Name;
-		last = &Director[Director.size()-1].Name;
-		sort(first, last);
-		//sorting actor
-		k = Actor.size();
-		first = &Actor[0].Name;
-		last = &Actor[Actor.size()-1].Name;
-		sort(first, last);
-		//sorting rating
-		k = Rating.size();
-		first = &Rating[0].Name;
-		last = &Rating[Rating.size()-1].Name;
-		sort(first, last);
 
