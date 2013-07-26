@@ -3,12 +3,20 @@ using namespace std;
 
 int main()
 {
+	string search;
 	data Hello;
 	ifstream file("imdbTest.txt");
 	Hello.readFile(file);
+	Hello.getMatch();
 	//Hello.Display();
-	srand(time(0));
+	
+	
+	enum {group=0};
 
+
+
+	
+	/*
 	string str1 = "ABCD", str2 = "EFGH";
 	cout << "str1: " << str1 << endl << "str2: " << str2 << endl;
 	cout << "str1.compare(str2): " << str1.compare(str2) << endl;
