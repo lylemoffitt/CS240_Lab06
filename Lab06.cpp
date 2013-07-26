@@ -414,7 +414,7 @@ bool data::getMatches(/*category group,*/ string lineStr)
 	lineStr.erase(0,i);
 
 	//Parse remaining keywords
-	while(lineStr.find_first_of(' ',0) < lineStr.end() )
+	while(lineStr.find_first_of(" ",0) < lineStr.end() )
 	{
 		// Use binarysearch to find first match
 		// Use linear search up, and then down to find all possible adjacent matches
@@ -434,10 +434,10 @@ bool data::getMatches(/*category group,*/ string lineStr)
 		}
 		//k_num=0 --> Populate initial match-list
 		//k_num>0 --> Remove non-matches
-		found = binarySearch(getKind(cat),lineStr);//found matching index #
+		found = binarySearch(getKind(cat),keyword);//found matching index #
 		if(found == -1) { return false;}// -1 = "No match found"
 		Temp = &(getKind(cat).at(found));//Copy elemtent reference to temp
-		for( int l=0, k[2]={1,-1}; l<2 ; ++l )//Initialize mode counter, and mode list
+		for( int l=0, k[2]={-1,1}; l<2 ; ++l )//Initialize mode counter, and mode list
 		{
 			int j=k[l];
 			bool exit=true;
@@ -465,9 +465,13 @@ bool data::getMatches(/*category group,*/ string lineStr)
 		}
 	}
 	if (vecTemp.empty()){	return false;	} //False for no matches or conflicting keywords
-	for(int i=0; i<vecTemp.size(); ++i){
-		cout<< vecTemp[i].Name
+	for(int i=0; i<vecTemp.size(); ++i)
+	{
+		Temp = vecTemp[i];
+		cout << Temp->link << " ??is the same as?? ";
+		cout << ((indexPtr)vecTemp[i])->link->Name << endl;
 	}
+	return true; // DONE!!!!
 
 
 }
