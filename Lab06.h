@@ -53,9 +53,10 @@ public:
 	std::string parseSpaces(std::string rawData);
 	std::string parseActors(std::string rawData);
 	std::string stringToupper(std::string rawData);
-	bool addNew(std::string rawData); 
+	bool addNew(std::string rawData);
 	int binarySearch(kindList list, std::string search_term);
 	bool getMatch();
+	bool getMatches(sting lineStr);
 	kindList getKind(char group);
 	void getKind(char group, int found, std::string keyword);
 	void printMatch(element::MoviePtr titleName);
@@ -71,7 +72,7 @@ private:
 public:
 	stopWatch();			// Class Constructor
 	~stopWatch();		// Class destructor
-	
+
 	void timeGo();		// Start the clock
 	void timeStop();		// Start the clock
 	double duration();	// Return the total duration
