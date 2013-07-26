@@ -17,7 +17,7 @@ bool operator< (const data::element& ONE, const data::element& TWO)
 // Class constructor
 	data::data()
 	{
-	comma = 0; //initialize counters -Tania
+		comma = 0;
 		space = 0;
 		m=0;
 		d=0;
@@ -31,9 +31,16 @@ bool operator< (const data::element& ONE, const data::element& TWO)
 	// Class destructor
 	data::~data()
 	{
-
+		Movie.clear();
+		delete &Movie;
+		Director.clear();
+		delete &Director;
+		Rating.clear();
+		delete &Rating;
+		Actor.clear();
+		delete &Actor;
 	}
-//takes in the file and reads the first line and returns the string -Tania
+
 	string data::readFile(istream& FILE)
 	{
 		string item;
@@ -49,10 +56,7 @@ bool operator< (const data::element& ONE, const data::element& TWO)
 		// Returns the length of the raw data string from the file, or zero on failure
 		return item;
 	}
-//takes string from readFile and parses it by commas -Tania
-//checks to see next charachter in string is a space if it is it fixes comma
-//then it copies the strung into a temp up until the first comma
-//then it increase the count and returns the parsed string
+
 	string data::parseCommas(string rawData)
 	{
 		if(rawData.at(comma) == rawData.size())
@@ -72,21 +76,12 @@ bool operator< (const data::element& ONE, const data::element& TWO)
 		}
 		comma++;
 		return temp;
-		/*if(rawData.at(comma) == '\0')
-			return "0";
-		else 
-			return temp;
-		/*
-		if(rawData.at(amount) == ' ')
-			rawData.erase(pos,amount+1);
-		else 
-			rawData.erase(pos,amount);*/
+	
 		// Read raw data string up to first comma
 		// Return string with leading/trailing whitespace stripped
 		// Repeat until string.end()
 	}
-//takes in string parsed by the parseComma fnt and parses it by spaces -Tania
-//this does the exact same thing as parseComma except it parses it at the spaces
+	
 	string data::parseSpaces(string rawData)
 	{
 		if(space == rawData.size())
@@ -179,7 +174,7 @@ bool operator< (const data::element& ONE, const data::element& TWO)
 			//toupper byspace
 			bySpace = stringToupper(bySpace);
 			Director.push_back(element(bySpace));
-			Director[d].link = theMovies[M].link;
+			Director[d].link = &theMovies[M];
 			d++;
 			bySpace = parseSpaces(director);
 			//build director vector
@@ -274,7 +269,7 @@ bool operator< (const data::element& ONE, const data::element& TWO)
 		int bottom = 0, top = 0, middle = 0, found = 0;
 		top = list.size();
 		search_term = stringToupper(search_term);
-		while(bottom < top && found == 0)
+		while(bottom <= top && found == 0)
 		{
 			middle = (top + bottom)/2;
 			if( search_term == list[middle].Name)
@@ -334,8 +329,8 @@ bool operator< (const data::element& ONE, const data::element& TWO)
 					i = found;
 					while(Movie[i].Name == keyword)
 					{
-						cout << Movie[i].link->Name << endl;
 						i--;
+						cout << Movie[i].link->Name << endl;
 					}
 					break;
 				case 'D':
@@ -348,8 +343,8 @@ bool operator< (const data::element& ONE, const data::element& TWO)
 					i = found;
 					while(Director[i].Name == keyword)
 					{
-						cout << Director[i].link->Name << endl;
 						i--;
+						cout << Director[i].link->Name << endl;
 					}
 					break;
 				case 'S':
@@ -362,8 +357,8 @@ bool operator< (const data::element& ONE, const data::element& TWO)
 					i = found;
 					while(Actor[i].Name == keyword)
 					{
-						cout << Actor[i].link->Name << endl;
 						i--;
+						cout << Actor[i].link->Name << endl;
 					}
 					break;
 				default:
@@ -372,36 +367,6 @@ bool operator< (const data::element& ONE, const data::element& TWO)
 			}
 		} while(i == 0);
 	}
-
-bool data::getMatch(category group, string sub_string)
-{
-	vector<element::MoviePtr> vecTemp;//Temp vector to hold reverences for all elements that match
-	element::MoviePtr Temp;//Temp Ptr to the matching element
-	int found = binarySearch(getKind(group),sub_string);//found matching index #
-	if(found == -1) { return false;}// -1 = "No match found"
-
-	Temp = &getKind(group).at(found);//Copy elemtent into temp
-	for( int l=0, k[2]={1,-1}; l<2 ; ++l )//Initialize mode counter, and mode list
-	{
-		for( int j=k[l]; Temp->Name == sub_string ;//Check for match
-			 j+=k[l], Temp = &getKind(group).at(found+j) )//Get next element
-		{
-			for( int i=0; i <= vecTemp.size(); ++i )//If found, check for dublicate in vecTemp
-			{
-				if( Temp == vecTemp[i] ){
-					break;//If duplicate, skip and get next
-				} else if( i == vecTemp.size() ){
-					vecTemp.push_back(Temp->Link);//If end of list is reached without match, then append
-				}
-			}
-
-		}
-	}
-
-	// Use binarySearch to find first match
-	// Use linear search up, and then down the block to find all possible adjacent matches
-	// printMatch() for each match found
-}
 
 	bool data::getMatch()
 	{
@@ -435,8 +400,8 @@ bool data::getMatch(category group, string sub_string)
 					i = found;
 					while(Rating[i].Name == keyword)
 					{
-						cout << Rating[i].link->Name << endl;
 						i--;
+						cout << Rating[i].link->Name << endl;
 					}
 					i = found;
 					do{
@@ -459,6 +424,34 @@ bool data::getMatch(category group, string sub_string)
 		// printMatch() for each match found
 		return 0;
 	}
+	/*
+	bool data::getMatch(category group, string sub_string)
+   {
++    vector<element::MoviePtr> vecTemp;
++    element Temp;
+     int found = binarySearch(getKind(group),sub_string);
+     if(found == -1) { return false;}
+-    while(found)
++    do{
++      Temp = getKind(group).at(found);
++      if (Temp.Name == sub_string){
++        for( int i=0; vecTemp[i] >= vecTemp.end(); ++i )
++        {
++          if(vecTemp[i] == Temp){  break;  }
++
++        }
++
++      }
++    } while ( )
+ 
+ 
+     // Use binarySearch to find first match
+     // Use linear search up, and then down the block to find all possible adjacent matches
+     // printMatch() for each match found
+-    return 0;
+   }
+ 
+	*/
 	void data::printMatch(element::MoviePtr titleName)
 	{
 		// Possibly print some header info
@@ -481,16 +474,15 @@ bool data::getMatch(category group, string sub_string)
 
 	void stopWatch::timeGo()		// Start the clock
 	{
-		startTime = time(NULL);
+		startTime = chrono::system_clock::now().time_since_epoch() / chrono::milliseconds(1);
 	}
 	void stopWatch::timeStop()		// Start the clock
 	{
-		stopTime = time(NULL);
+		stopTime = chrono::system_clock::now().time_since_epoch() / chrono::milliseconds(1);
 	}
-	double stopWatch::duration()	// Return the total duration
+	long stopWatch::duration()	// Return the total duration
 	{
 		// This probably needs to be formatted..
-		return difftime(startTime,stopTime);
+		return stopTime-startTime;
 	}
-
 
