@@ -25,9 +25,10 @@ private:
 		}
 
 	};
-	 //there's error for the 'theName'
-	typedef element* indexPtr;
+	//there's error for the 'theName'
+	typedef element::MoviePtr indexPtr; //Changed from element*
 	typedef std::vector<element> kindList; // The vector of each category list
+	typedef kindList * kindPtr;// Reference pointer to a kindList
 	kindList Movie, Rating, Director, Actor, theMovies;
 	int m,r,d,a, M;
 	enum category
@@ -38,7 +39,7 @@ private:
 		S //actors
 	};
 	int comma, //keeps track of placement in string for parseCommas fnt
-		space; //keeps track of placement in string for parseSpaces fnt
+	space; //keeps track of placement in string for parseSpaces fnt
 
 public:
 	data();		// Class constructor
