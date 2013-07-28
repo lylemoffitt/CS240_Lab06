@@ -433,10 +433,23 @@ bool data::getMatches(/*category group,*/ string lineStr)
 
 	//Parse Category
 	i = lineStr.find_first_of("TRDS",0);
+	//for lab make another int j = lineStr.find_first_of("TRDS", 0);
 	cat = lineStr.at(i);
+	//char cat2 = lineStr.at(j);
 	lineStr.erase(0,i);
-
+	//int star = lineStr.find("*");
+	//lineStr.erase(star, j);
+	//check to see if any double spaces lineStr.find("  ", 0);
+	//erase if any. size_t findDouble = lineStr.find("  ", 0);
+	//if findDouble == npos)
+	//else lineStr.erase(findDouble);
+	//should we account for the possibility that the user will accidentally type in two spaces?
+	//such as T Harry  Potter instead of
+	//        T Harry Potter
+	
 	//Parse remaining keywords
+	//can't compare an int with an iterator
+	//try using lineStr.size() if you want the index one past the last element
 	while(lineStr.find_first_of(" ",0) < lineStr.end() )
 	{
 		// Use binarysearch to find first match
