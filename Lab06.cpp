@@ -456,6 +456,14 @@ bool data::getMatches(/*category group,*/ string lineStr)
 		// Use linear search up, and then down to find all possible adjacent matches
 		i = lineStr.find_first_of(" \n\0",0);
 		keyword = lineStr.substr(0,i);
+		//or we don't make a cat2
+		//and we check to see if it is one of the key letters
+		//if(keyword == 'R' || keyword == 'T' || keyword == 'D' || keyword == 'S')
+		//{cat2 = keyword
+		//lineStr.erase(0,i);
+		//i = lineStr.find_first_or(" \n\0",0);
+		//keyword = lineStr.subset(0,i);
+		// }
 		lineStr.erase(0,i);
 		if(cat == 'R'){
 			char* spc;     // alias of size_t
