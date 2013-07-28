@@ -41,6 +41,9 @@ data::~data()
 	delete &Rating;
 	Actor.clear();
 	delete &Actor;
+	//This was shooting back errors, it was giving me that memory map thing
+	//I had last night. Jess said she thinks we don't need to put anything
+	//in the destructor
 	//Tania's had this commented out.
 	//	{
 	//		//	Movie.clear();
@@ -86,7 +89,9 @@ string data::readFile(istream& FILE)
 //then it increase the count and returns the parsed string
 string data::parseCommas(string rawData)
 {
-	if(rawData.at(comma) == rawData.size())
+	//if(rawData.at(comma) == rawData.size())
+	//^ that doesn't make sense...did I have that before?
+	if(comma == rawData.size())
 	{
 		comma = 0;
 		return "0";
@@ -142,7 +147,9 @@ string data::parseActors(string rawData)
 	//make a check
 	if(rawData.at(comma) == ' ')
 		comma += 1;
-	else if(rawData.at(comma) == (rawData.size() - 1))
+	//else if(rawData.at(comma) == (rawData.size() - 1))
+	//^ same thing as before, doesn't really make sense
+	else if(comma == rawData.size())
 	{
 		comma = 0;
 		return "0";
@@ -177,7 +184,7 @@ bool data::addNew(string rawData) // IF parseCommas is run outside of this, then
 	movie = parseCommas(rawData);
 	theMovies.push_back(element(movie));
 	((element)theMovies[M]).link = &theMovies[M];
-
+	//I get an error saying "expression must a modifiable lvalue"
 	rating = parseCommas(rawData);
 	director = parseCommas(rawData);
 	actors = parseActors(rawData);
