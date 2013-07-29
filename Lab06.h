@@ -8,7 +8,7 @@
 #include <fstream>
 #include <sstream>
 #include <algorithm>
-#include <chrono>
+#include <boost/chrono.hpp> //Apparently it's part of the boost library..
 
 class data
 {
@@ -23,6 +23,7 @@ private:
 			Name = theName;
 			link = nullptr;
 		}
+		~element();	// Do we need an element destructor?
 
 	};
 	//there's error for the 'theName'
@@ -49,6 +50,7 @@ public:
 	bool compareElem(element ONE, element TWO);
 	void sortElem();
 	friend bool operator< (const element& ONE, const element& TWO);
+	std::string trimDelim(std::string input, std::string delimz);
 	std::string readFile(std::istream& FILE);
 	std::string parseCommas(std::string rawData);
 	std::string parseSpaces(std::string rawData);

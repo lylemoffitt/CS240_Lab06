@@ -1,6 +1,7 @@
 //functions
 #include "Lab06.h"
 using namespace std;
+using namespace boost;
 
 bool operator< (const data::element& ONE, const data::element& TWO)
 {
@@ -26,25 +27,24 @@ data::data()
 	r=0;
 	a=0;
 	M=0;
-
+	//Zero initialize and make empty.
+	//Hopefully this gives the kindList(s) global scope.
+	Movie.clear();
+	Rating.clear();
+	Director.clear();
+	Actor.clear();
+	theMovies.clear();
 }
 
 
 // Class destructor
 data::~data()
 {
-	Movie.clear();
-	delete &Movie;
-	Director.clear();
-	delete &Director;
-	Rating.clear();
-	delete &Rating;
-	Actor.clear();
-	delete &Actor;
+	// Removed duplicate. Restore backup (below) if needed.
+
 	//This was shooting back errors, it was giving me that memory map thing
 	//I had last night. Jess said she thinks we don't need to put anything
 	//in the destructor
-	//Tania's had this commented out.
 	//	{
 	//		//	Movie.clear();
 	//		delete Movie;
@@ -89,6 +89,7 @@ string data::readFile(istream& FILE)
 //then it increase the count and returns the parsed string
 string data::parseCommas(string rawData)
 {
+	//return trimDelim(rawData," ,\0c");//Return first deliminated substring and remove it from input
 	//if(rawData.at(comma) == rawData.size())
 	//^ that doesn't make sense...did I have that before?
 	if(comma == rawData.size())
@@ -100,7 +101,7 @@ string data::parseCommas(string rawData)
 		comma += 1;
 	string temp, TEMP;
 	int i=0, diff= rawData.size() - comma;
-	while(rawData.at(comma) != ',' && i < diff)
+	while( (rawData.at(comma) != ',') && (i < diff) )
 	{
 		TEMP = rawData.at(comma);
 		temp.append(TEMP);
@@ -113,10 +114,29 @@ string data::parseCommas(string rawData)
 	// Repeat until string.end()
 }
 
+//Takes `input` string and returns first substring deliminated by `delimz`
+//To get the first non-space & non-comma substring -> delimz = " ,"
+string data::trimDelim(string input, string delimz)
+{
+	int start = input.find_first_not_of(delimz.data(),0);
+	if( start <0 ){	return "0";	} //Return "0" if no substring exists
+	int stop = input.find_first_of(delimz.data(),0);
+	if( stop <=0 ){	stop = input.length();	} //Catch EOL exception not specified in `delimz`
+	string output = input.substr(start,stop);\
+
+	if ( delimz.find_first_of("-",delimz.length()) ){	input.erase(start,stop);	}
+	if ( delimz.find_first_of("c",delimz.length()) ){	++comma;	}
+	if ( delimz.find_first_of("s",delimz.length()) ){	++space;	}
+
+	return output;//Return the specified substring as excluded by `delimz`
+	//Also delete the substring from input if `delimz` has "\0-" terminus
+}
+
 //takes in string parsed by the parseComma fnt and parses it by spaces -Tania
 //this does the exact same thing as parseComma except it parses it at the spaces
 string data::parseSpaces(string rawData)
 {
+	//return trimDelim(rawData," ,\0s") ;
 	if(space == rawData.size())
 	{
 		space = 0;
@@ -143,6 +163,7 @@ string data::parseSpaces(string rawData)
 
 string data::parseActors(string rawData)
 {
+	//return trimDelim(rawData," ,") ;//Return first substring that is not comma or space
 	string temp, TEMP;
 	//make a check
 	if(rawData.at(comma) == ' ')
@@ -181,13 +202,13 @@ bool data::addNew(string rawData) // IF parseCommas is run outside of this, then
 {
 	string movie, rating, director, actors, bySpace;
 	//vector<element>:: iterator it;
-	movie = parseCommas(rawData);
+	movie = parseCommas(rawData); //=trimDelim(rawData," ,");
 	theMovies.push_back(element(movie));
-	((element)theMovies[M]).link = &theMovies[M];
+	theMovies[M].link = (indexPtr)(&(theMovies[M]));
 	//I get an error saying "expression must a modifiable lvalue"
-	rating = parseCommas(rawData);
-	director = parseCommas(rawData);
-	actors = parseActors(rawData);
+	rating = parseCommas(rawData); //=trimDelim(rawData," ,");
+	director = parseCommas(rawData);//=trimDelim(rawData," ,");
+	actors = parseActors(rawData);//=trimDelim(rawData," ,");
 
 	bySpace = parseSpaces(movie);
 	while(bySpace != "0")
@@ -195,7 +216,7 @@ bool data::addNew(string rawData) // IF parseCommas is run outside of this, then
 		//toupper byspace
 		bySpace = stringToupper(bySpace);
 		Movie.push_back(element(bySpace));
-		((element)Movie[m]).link = &theMovies[M];
+		Movie[m].link = theMovies[M].link;
 		cout << ((element)Movie[m]).link->Name<< endl;
 		++m;
 		bySpace = parseSpaces(movie);
@@ -209,7 +230,7 @@ bool data::addNew(string rawData) // IF parseCommas is run outside of this, then
 		//toupper byspace
 		bySpace = stringToupper(bySpace);
 		Director.push_back(element(bySpace));
-		((element)Director[d]).link = &theMovies[M];
+		Director[d].link = theMovies[M].link;
 		cout << ((element)Director[d]).link->Name<< endl;
 		++d;
 		bySpace = parseSpaces(director);
@@ -223,7 +244,7 @@ bool data::addNew(string rawData) // IF parseCommas is run outside of this, then
 		//toupper byspace
 		bySpace = stringToupper(bySpace);
 		Actor.push_back(element(bySpace));
-		((element)Actor[a]).link = &theMovies[M];
+		Actor[a].link = theMovies[M].link;
 		cout << ((element)Actor[a]).link->Name<< endl;
 		++a;
 		bySpace = parseSpaces(actors);
@@ -233,7 +254,7 @@ bool data::addNew(string rawData) // IF parseCommas is run outside of this, then
 
 	bySpace = parseSpaces(rating);
 	Rating.push_back(element(bySpace));
-	((element)Rating[r]).link = &theMovies[M];
+	Rating[r].link = theMovies[M].link;
 	cout << ((element)Rating[r]).link->Name<< endl;
 	++r;	++M;
 	//build rating vector
@@ -422,21 +443,31 @@ void data::fetch()
 
 bool data::getMatches(/*category group,*/ string lineStr)
 {
+	if( lineStr.length() <=0 ){	return false;	}
 	vector<element::MoviePtr> vecTemp;//Temp vector to hold reverences for all elements that match
 	element::MoviePtr Temp;//Temp Ptr to the matching element
 	int found=0;
 	//Iniiialize
-	string  keyword,lastword;
-	char cat;
-	int i=0,k_num=0;
-	double rat1=0.0,rat2=10.0,ratComp;
+	char cat='\0',cat2='\0';
+	string  keyword, secStr;
+	int i, k_num=0;
+	double rat1=0.0, rat2=10.0, ratComp;
 
-	//Parse Category
+	//Parse Category #1
 	i = lineStr.find_first_of("TRDS",0);
-	//for lab make another int j = lineStr.find_first_of("TRDS", 0);
 	cat = lineStr.at(i);
-	//char cat2 = lineStr.at(j);
 	lineStr.erase(0,i);
+
+	i = lineStr.find_first_of("*&",0);
+	if (i > 0)
+	{
+		lineStr.erase(i,0); //Remove the duplex character(* or &)
+		secStr = lineStr.substr(i,-1); //Copy second search into new string
+		lineStr.erase(i,-1);//Remove second string from first
+		i = secStr.find_first_of("TRDS",0);
+		cat2 = secStr.at(i);
+		secStr.erase(0,i);
+	}
 	//int star = lineStr.find("*");
 	//lineStr.erase(star, j);
 	//check to see if any double spaces lineStr.find("  ", 0);
@@ -446,67 +477,76 @@ bool data::getMatches(/*category group,*/ string lineStr)
 	//should we account for the possibility that the user will accidentally type in two spaces?
 	//such as T Harry  Potter instead of
 	//        T Harry Potter
-	
+
 	//Parse remaining keywords
 	//can't compare an int with an iterator
 	//try using lineStr.size() if you want the index one past the last element
-	while(lineStr.find_first_of(" ",0) < lineStr.end() )
-	{
-		// Use binarysearch to find first match
-		// Use linear search up, and then down to find all possible adjacent matches
-		i = lineStr.find_first_of(" \n\0",0);
-		keyword = lineStr.substr(0,i);
-		//or we don't make a cat2
-		//and we check to see if it is one of the key letters
-		//if(keyword == 'R' || keyword == 'T' || keyword == 'D' || keyword == 'S')
-		//{cat2 = keyword
-		//lineStr.erase(0,i);
-		//i = lineStr.find_first_or(" \n\0",0);
-		//keyword = lineStr.subset(0,i);
-		// }
-		lineStr.erase(0,i);
-		if(cat == 'R'){
-			char* spc;     // alias of size_t
-
-			rat1= strtod(lineStr.data(),&spc);
-			if(spc != '\0'){
-				rat2 = strtod(spc,NULL);
-			} else {
-				rat2=10.0;
-			}
-			lineStr.clear();
-		}
-		//k_num=0 --> Populate initial match-list
-		//k_num>0 --> Remove non-matches
-		found = binarySearch(getKind(cat),keyword);//found matching index #
-		if(found == -1) { return false;}// -1 = "No match found"
-		Temp = &(getKind(cat).at(found));//Copy elemtent reference to temp
-		for( int l=0, k[2]={-1,1}; l<2 ; ++l )//Initialize mode counter, and mode list
+	while( true )
+	{//Loops once or twice depending on the condition of cat2(second category specifier)
+		while( lineStr.length() > 0 )
 		{
-			int j=k[l];
-			bool exit=true;
-			while(exit)
-			{
-				ratComp = strtod(Temp->Name.data(),NULL);
-				if ( (rat1<=ratComp && rat2>=ratComp)||
-					 (Temp->Name.compare(lineStr)==0 )	 ){  //Check for match
-				} else{	exit = false;	break; }
-				for( int i=0; i <= vecTemp.size(); ++i )//If found, check for dublicate in vecTemp
-				{
-					if( Temp == vecTemp[i] ){
-						if(k_num==0){ break; //If duplicate, skip and get next (FAST Initialize)
-						} else{ continue; }//If it matched go to the next and check it.
-					} else if( (i==vecTemp.size()) && //If end of list is reached without match
-							   (k_num==0) ){//AND this is the first keyword
-						vecTemp.push_back(Temp->link);//Then append reference to vector
-					} else {//IF the pointer does not match, and it is not the first word
-						vecTemp.erase(vecTemp.begin() +i);//Remove that
-					}
+			// Use binarysearch to find first match
+			// Use linear search up, and then down to find all possible adjacent matches
+			i = lineStr.find_first_of(" \n\0",0);
+			keyword = lineStr.substr(0,i);
+			if( keyword.length() <=0 ){	break;	}
+			lineStr.erase(0,i);
+			if( cat == 'R' )
+			{	char* spc;     // alias of size_t
+				//Convert rating substring(s) to double
+				rat1= strtod(lineStr.data(),&spc);
+				if(spc != '\0')
+				{	rat2 = strtod(spc,NULL);
+				} else
+				{	rat2=10.0;
 				}
-				j+=k[l];
-				Temp = &(getKind(cat).at(found+j)) ;//Get next element
+				lineStr.clear();
+			}
+			//k_num=0 --> Populate initial match-list
+			//k_num>0 --> Remove non-matches
+			found = binarySearch(getKind(cat),keyword);//found matching index #
+			if( found == -1 ){	return false;	}// -1 = "No match found"
+			Temp = &(getKind(cat).at(found));//Copy elemtent reference to temp
+			for( int l=0, k[2]={-1,1}; l<2 ; ++l )//Initialize mode counter, and mode list
+			{
+				int j=k[l];
+				while(true)
+				{
+					ratComp = strtod(Temp->Name.data(),NULL);
+					if ( (rat1<=ratComp && rat2>=ratComp) ||
+						 (Temp->Name.compare(keyword)==0 )	 )
+					{ //Empty statement means "continue on", since alternate is break
+					} else
+					{	break;	}
+					for( int i=0; i <= vecTemp.size(); ++i )//If found, check for dublicate in vecTemp
+					{
+						if( Temp == vecTemp[i] )
+						{	if(k_num==0)
+							{	break; //If duplicate, skip and get next (FAST Initialize)
+							} else
+							{	continue; //If it matched go to the next and check it.
+							}
+						} else if( (i==vecTemp.size()) && //If end of list is reached without match
+								   (k_num==0) )//AND this is the first keyword
+						{	vecTemp.push_back(Temp->link);//Then append reference to vector
+						} else //IF the pointer does not match, and it is not the first word
+						{	vecTemp.erase(vecTemp.begin() +i);//Remove that
+						}
+					}
+					j+=k[l];
+					Temp = &(getKind(cat).at(found+j)) ;//Get next element
+				}
 			}
 		}
+		if (cat2 != '\0')
+		{	cat=cat2; //Transfer search params
+			lineStr = secStr;
+			cat2 = '\0'; //Set break contition
+			continue; //Repeat search loop with new params
+		}else
+		{	break; //Exit loop
+		}
+
 	}
 	if (vecTemp.empty()){	return false;	} //False for no matches or conflicting keywords
 	for(int i=0; i<vecTemp.size(); ++i)

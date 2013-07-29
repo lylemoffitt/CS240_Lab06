@@ -32,8 +32,8 @@
 
 all:  Driver06.o
 
-Driver06.o :  Lab06.cpp Driver.cpp
-	$(CC_THIS) -c Lab06.cpp Driver.cpp -o $(NAME)
+Driver06.o :  Lab06.cpp Driver06.cpp
+	$(CC_THIS) -c Lab06.cpp Driver06.cpp -o $(NAME)
 
 
 clean:
