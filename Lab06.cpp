@@ -161,6 +161,7 @@ string data::parseSpaces(string rawData)
 	return temp;
 }
 
+
 string data::parseActors(string rawData)
 {
 	//return trimDelim(rawData," ,") ;//Return first substring that is not comma or space
@@ -642,8 +643,10 @@ stopWatch::stopWatch()			// Class Constructor
 }
 stopWatch::~stopWatch()		// Class destructor
 {
-	delete &startTime;
-	delete &stopTime;
+//	delete &startTime;
+//	delete &stopTime;
+	// ^Un-necessary^
+	//"Memory already freed"
 }
 
 void stopWatch::timeGo()		// Start the clock
