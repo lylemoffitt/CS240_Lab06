@@ -8,7 +8,7 @@
 #include <fstream>
 #include <sstream>
 #include <algorithm>
-#include <boost/chrono.hpp> //Apparently it's part of the boost library..
+#include <chrono> //Apparently it's part of the boost library..
 
 class data
 {

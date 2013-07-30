@@ -13,6 +13,8 @@ bool operator< (const data::element& ONE, const data::element& TWO)
 		return true;
 	else if(ONE.Name.compare(TWO.Name) > 0)
 		return false;
+	else
+		return false;
 }
 
 
@@ -59,12 +61,12 @@ data::~data()
 }
 
 //takes in the file and reads the first line and returns the string -Tania
-string data::readFile(istream& FILE)
+string data::readFile(istream &FILE)
 {
 	stopWatch timer;
 	string item;
 	timer.timeGo();
-	while(!FILE.eof())
+	while( !(FILE.eof()) )
 	{
 		comma = 0;
 		space = 0;
@@ -92,7 +94,7 @@ string data::parseCommas(string rawData)
 	//return trimDelim(rawData," ,\0c");//Return first deliminated substring and remove it from input
 	//if(rawData.at(comma) == rawData.size())
 	//^ that doesn't make sense...did I have that before?
-	if(comma == rawData.size())
+	if(comma == (int)rawData.size())
 	{
 		comma = 0;
 		return "0";
@@ -137,7 +139,7 @@ string data::trimDelim(string input, string delimz)
 string data::parseSpaces(string rawData)
 {
 	//return trimDelim(rawData," ,\0s") ;
-	if(space == rawData.size())
+	if(space == (int)rawData.size())
 	{
 		space = 0;
 		return "0"; //or we can say while string.at(string.length()) != comma in addnew function
@@ -171,7 +173,7 @@ string data::parseActors(string rawData)
 		comma += 1;
 	//else if(rawData.at(comma) == (rawData.size() - 1))
 	//^ same thing as before, doesn't really make sense
-	else if(comma == rawData.size())
+	else if(comma == (int)rawData.size())
 	{
 		comma = 0;
 		return "0";
@@ -190,7 +192,7 @@ string data::parseActors(string rawData)
 string data::stringToupper(string rawData)
 {
 	int i=0;
-	while(i < rawData.length())
+	while(i < (int)rawData.length())
 	{
 		rawData.at(i) = toupper(rawData.at(i));
 		++i;
@@ -298,10 +300,10 @@ void data::Display()
 	int i=0;
 	//for(it = Movie.begin(); it != Movie.end(); it++)
 	cout <<"theMovies"<<endl;
-	for(i=0; i<theMovies.size(); ++i)
+	for( i=0; i<(int)theMovies.size(); ++i )
 		cout << ((element)theMovies[i]).Name << endl;
 	cout << endl << "movie" << endl;
-	for(i=0;i<Movie.size();++i)
+	for( i=0; i<(int)Movie.size(); ++i )
 	{
 		cout << i << endl;
 		if( ((element)Movie[i]).link == nullptr )
@@ -312,13 +314,13 @@ void data::Display()
 			cout << ((element)Movie[i]).link->Name << endl;
 	}
 	cout << endl<<"rating"<<endl;
-	for(i=0;i<Rating.size();++i)
+	for( i=0; i<(int)Rating.size(); ++i)
 		cout << ((element)Rating[i]).link->Name << endl;
 	cout << endl<<"director" << endl;
-	for(i=0;i<Director.size();i++)
+	for( i=0; i<(int)Director.size(); i++)
 		cout << ((element)Director[i]).link->Name << endl;
 	cout << endl<< "actor"<< endl;
-	for(i=0;i<Actor.size();i++)
+	for( i=0; i<(int)Actor.size(); i++)
 		cout << ((element)Actor[i]).link->Name << endl;
 	cout << endl;
 }
@@ -372,14 +374,14 @@ void data::getKind(char group, int found, string keyword)
 	switch( group )
 	{
 		case 'T':
-			for(i=found;i<Movie.size(); i++)
+			for(i=found; i<(int)Movie.size(); i++)
 			{
 				if(Movie[i].Name == keyword)
 					cout << Movie[i].link->Name << endl;
 				else
 					break;
 			}
-			for(i=found-1;i>=0; i--)
+			for(i=found-1; i>=0; i--)
 			{
 				if(Movie[i].Name == keyword)
 					cout << Movie[i].link->Name << endl;
@@ -388,7 +390,7 @@ void data::getKind(char group, int found, string keyword)
 			}
 			break;
 		case 'D':
-			for(i=found;i<Director.size();i++)
+			for( i=found; i<(int)Director.size(); i++)
 			{
 				if(Director[i].Name == keyword)
 					cout << Director[i].link->Name << endl;
@@ -404,7 +406,7 @@ void data::getKind(char group, int found, string keyword)
 			}
 			break;
 		case 'S':
-			for(i=found;i<Director.size();i++)
+			for( i=found; i<(int)Director.size(); i++ )
 			{
 				if(Actor[i].Name == keyword)
 					cout << Actor[i].link->Name << endl;
@@ -519,7 +521,7 @@ bool data::getMatches(/*category group,*/ string lineStr)
 					{ //Empty statement means "continue on", since alternate is break
 					} else
 					{	break;	}
-					for( int i=0; i <= vecTemp.size(); ++i )//If found, check for dublicate in vecTemp
+					for( int i=0; i <= (int)vecTemp.size(); ++i )//If found, check for dublicate in vecTemp
 					{
 						if( Temp == vecTemp[i] )
 						{	if(k_num==0)
@@ -527,7 +529,7 @@ bool data::getMatches(/*category group,*/ string lineStr)
 							} else
 							{	continue; //If it matched go to the next and check it.
 							}
-						} else if( (i==vecTemp.size()) && //If end of list is reached without match
+						} else if( (i==(int)vecTemp.size()) && //If end of list is reached without match
 								   (k_num==0) )//AND this is the first keyword
 						{	vecTemp.push_back(Temp->link);//Then append reference to vector
 						} else //IF the pointer does not match, and it is not the first word
@@ -550,7 +552,7 @@ bool data::getMatches(/*category group,*/ string lineStr)
 
 	}
 	if (vecTemp.empty()){	return false;	} //False for no matches or conflicting keywords
-	for(int i=0; i<vecTemp.size(); ++i)
+	for(int i=0; i<(int)vecTemp.size(); ++i)
 	{
 		Temp = vecTemp[i];
 		cout << Temp->link << " ??is the same as?? ";
@@ -566,7 +568,7 @@ bool data::getMatch()
 	string search, keyword, endBound;
 	char cat;
 	kindList temp;
-	int found = 0, i=0;
+	int found = 0;//, i=0;
 	cout << "Type Exit to stop searching \nSearch: ";
 	getline(cin, search);
 	search = stringToupper(search);
@@ -615,7 +617,7 @@ void data::findRating(string firstBound, string search, int found)
 			break;
 	}
 	i = found+1;
-	if(i >= Rating.size())
+	if(i >= (int)Rating.size())
 		return;
 	else
 	{
