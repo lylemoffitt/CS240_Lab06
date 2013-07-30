@@ -61,25 +61,26 @@ data::~data()
 }
 
 //takes in the file and reads the first line and returns the string -Tania
-string data::readFile(istream &FILE)
+string data::readFile(ifstream &FILE)
 {
 	stopWatch timer;
-	string item;
+	string item,tmpStr;
 	timer.timeGo();
-	while( !(FILE.eof()) )
+
 	{
 		comma = 0;
 		space = 0;
 		getline(FILE, item);
-		if(!FILE.eof())
+		if(!FILE.good())
 			addNew(item);
-	}
+	}while( FILE.good() );
 	timer.timeStop();
 	cout << timer.duration() << "ms to import" << endl;
 	Display();
 	sortElem();
 	timer.timeStop();
 	cout << timer.duration() << "ms to import & sort" << endl;
+	fetch();
 	// Takes in the initialization file as input.
 	// Returns the length of the raw data string from the file, or zero on failure
 	return item;
@@ -343,7 +344,7 @@ int data::binarySearch(kindList list, string search_term)
 		{	bottom = middle + 1;
 		}
 	}
-	return -1;
+	return (0-middle);
 	// This could be potentially be replaced by std::binary_search from the algorithm library
 	// .. though, i don't know how easily we can adapt that to our needs
 	// Use std::string.compare() to determine break direction.
@@ -426,6 +427,7 @@ void data::getKind(char group, int found, string keyword)
 			break;
 	}
 }
+
 void data::fetch()
 {
 	stopWatch timer;
@@ -471,12 +473,7 @@ bool data::getMatches(/*category group,*/ string lineStr)
 		cat2 = secStr.at(i);
 		secStr.erase(0,i);
 	}
-	//int star = lineStr.find("*");
-	//lineStr.erase(star, j);
-	//check to see if any double spaces lineStr.find("  ", 0);
-	//erase if any. size_t findDouble = lineStr.find("  ", 0);
-	//if findDouble == npos)
-	//else lineStr.erase(findDouble);
+
 	//should we account for the possibility that the user will accidentally type in two spaces?
 	//such as T Harry  Potter instead of
 	//        T Harry Potter
@@ -491,15 +488,16 @@ bool data::getMatches(/*category group,*/ string lineStr)
 			// Use binarysearch to find first match
 			// Use linear search up, and then down to find all possible adjacent matches
 			i = lineStr.find_first_of(" \n\0",0);
-			keyword = lineStr.substr(0,i);
+			if( lineStr.substr(0,i).length() <2 )
+				keyword = lineStr.substr(0,i);
 			if( keyword.length() <=0 ){	break;	}
 			lineStr.erase(0,i);
 			if( cat == 'R' )
 			{	char* spc;     // alias of size_t
 				//Convert rating substring(s) to double
-				rat1= strtod(lineStr.data(),&spc);
+				rat1= strtod(lineStr.c_str(),&spc);
 				if(spc != '\0')
-				{	rat2 = strtod(spc,NULL);
+				{	rat2 = strtod(spc,nullptr);
 				} else
 				{	rat2=10.0;
 				}
@@ -510,14 +508,16 @@ bool data::getMatches(/*category group,*/ string lineStr)
 			found = binarySearch(getKind(cat),keyword);//found matching index #
 			if( found == -1 ){	return false;	}// -1 = "No match found"
 			Temp = &(getKind(cat).at(found));//Copy elemtent reference to temp
-			for( int l=0, k[2]={-1,1}; l<2 ; ++l )//Initialize mode counter, and mode list
+			int  k[2]={-1,1};
+			for( int l=0; l<2 ; ++l )//Initialize mode counter, and mode list
 			{
 				int j=k[l];
 				while(true)
 				{
-					ratComp = strtod(Temp->Name.data(),NULL);
-					if ( (rat1<=ratComp && rat2>=ratComp) ||
-						 (Temp->Name.compare(keyword)==0 )	 )
+					ratComp = strtod(Temp->Name.c_str(),nullptr);
+					if ( Temp->Name.compare(keyword)==0 )
+					{
+					} else if ( Temp->Name.compare(keyword)==0 )
 					{ //Empty statement means "continue on", since alternate is break
 					} else
 					{	break;	}
@@ -645,8 +645,8 @@ stopWatch::stopWatch()			// Class Constructor
 }
 stopWatch::~stopWatch()		// Class destructor
 {
-//	delete &startTime;
-//	delete &stopTime;
+	//	delete &startTime;
+	//	delete &stopTime;
 	// ^Un-necessary^
 	//"Memory already freed"
 }

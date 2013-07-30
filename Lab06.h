@@ -8,7 +8,7 @@
 #include <fstream>
 #include <sstream>
 #include <algorithm>
-#include <chrono> //Apparently it's part of the boost library..
+#include <boost/chrono.hpp> //Apparently it's part of the boost library..
 
 class data
 {
@@ -51,7 +51,7 @@ public:
 	void sortElem();
 	friend bool operator< (const element& ONE, const element& TWO);
 	std::string trimDelim(std::string input, std::string delimz);
-	std::string readFile(std::istream& FILE);
+	std::string readFile(std::ifstream& FILE);
 	std::string parseCommas(std::string rawData);
 	std::string parseSpaces(std::string rawData);
 	std::string parseActors(std::string rawData);
