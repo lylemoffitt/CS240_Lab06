@@ -1,11 +1,12 @@
 # Choose compiler
-    CCC	= GCC#or LLVM
+    CCC = GCC
+#    CCC = LLVM
 
     USE_GCC	=  g++-4.8 # Change if you have a different compiler or version of GCC
-    GCC_OP	=  -Wall -Wextra #-Weffc++
+    GCC_OP	=  -Wall #-Wextra #-Weffc++
 
     USE_LLVM	=  clang++
-    LLVM_OP	=  -gO0 -Weverything -fcaret-diagnostics
+    LLVM_OP	=  -g -Weverything -fcaret-diagnostics
 
 # Final Compiled Executable
     NAME	=  imdb
@@ -30,14 +31,18 @@
 #${%.cpp:%.cpp=%.o}:   ${%.cpp}
 #	$(CC_THIS) ${%.o}
 
-all:  Driver06.o
-	$(CC_THIS) Driver06.o -o $(NAME)
+all:  Driver06.o Lab06.o
+	$(CC_THIS) Driver06.o Lab06.o -o $(NAME)
 
-Driver06.o :  Lab06.cpp Driver06.cpp
-	$(CC_THIS) -c Lab06.cpp Driver06.cpp
+Driver06.o  :  Driver06.cpp
+	$(CC_THIS) -c Driver06.cpp
+
+Lab06.o	    :  Lab06.cpp Lab06.h
+	$(CC_THIS) -c Lab06.cpp
 
 
 
 clean:
 	@- rm ./$(NAME)
-	@- rm ./$(Driver06.o)
+	@- rm ./*.o
+	ls
