@@ -1,6 +1,6 @@
 #ifndef LAB06_H
 #define LAB06_H
-
+//#define LINUX
 #include <vector>
 #include <string>
 #include <iostream>
@@ -9,8 +9,14 @@
 #include <chrono>
 #include <sstream>
 #include <algorithm>
-#include <boost/chrono.hpp> //Apparently it's part of the boost library..
+#ifndef LINUX
+#define WINDOWZ
+#include <chrono>
+#endif
 
+#ifdef LINUX
+#include <boost/chrono.hpp> //Apparently it's part of the boost library..
+#endif
 class data
 {
 private:
