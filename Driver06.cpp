@@ -7,11 +7,11 @@ int main()
 	data Hello;
 	ifstream file;
 	file.open("imdbTest.txt", ifstream::in);
-	
+
 	Hello.readFile(file);
 	Hello.fetch();
 
-	
+
 
 	//Hello.getMatch();
 	//Hello.Display();
@@ -30,7 +30,7 @@ int main()
 		//one problem it reads in the space
 		getline(infile, line1, ',');
 		line1.erase(0,1); //we'll have to ask if there will always be a space after each comma
-		
+
 		int* hi;
 		hi = nullptr;
 

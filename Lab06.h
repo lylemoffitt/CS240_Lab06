@@ -9,6 +9,7 @@
 #include <chrono>
 #include <sstream>
 #include <algorithm>
+#include <boost/chrono.hpp> //Apparently it's part of the boost library..
 
 class data
 {
@@ -32,10 +33,10 @@ private:
 		}*/
 	};
 	typedef std::vector<element> kindList;
-	typedef element* indexPtr;
 	 // The vector of each category list
 	kindList Movie, Director, Actor, Rating, theMovies;
 	std::vector<std::string> vecTemp;
+	typedef element::MoviePtr indexPtr; //Changed from element*
 	int m,r,d,a, M;
 	enum category
 	{
@@ -45,7 +46,7 @@ private:
 		S //actors
 	};
 	int comma, //keeps track of placement in string for parseCommas fnt
-		space; //keeps track of placement in string for parseSpaces fnt
+	space; //keeps track of placement in string for parseSpaces fnt
 
 public:
 	data();		// Class constructor
@@ -56,6 +57,7 @@ public:
 	void sortElem();
 	friend bool operator< (const element& ONE, const element& TWO);
 	//friend bool operator< (const element& rhs);
+	std::string trimDelim(std::string input, std::string delimz);
 	std::string readFile(std::ifstream& FILE);
 	std::string parseCommas(std::string rawData);
 	std::string parseSpaces(std::string rawData);
