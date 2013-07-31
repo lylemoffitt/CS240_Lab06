@@ -75,7 +75,7 @@ public:
 	bool getMatch();
 	kindList getKind(char group);
 	void getKind(char group, int found, std::string keyword);
-	void findRating(std::string firstBound, std::string search, std::string endBound, int found);
+	void findRating(std::string firstBound, std::string endBound, int found);
 	bool getMatches(std::string lineStr);
 	std::string getStarMatch(std::string search);
 	void data::getMatchesAux();

@@ -566,7 +566,7 @@ void data::getKind(char group, int found, string keyword)
 
 	bool data::getMatch()
 	{
-		string search, keyword, endBound, secondSearch;
+		string search, keyword, endBound, secondSearch, firstBound;
 		char cat1, cat2;
 		int firstX, secondX, star, space2;
 		kindList temp;
@@ -594,17 +594,25 @@ void data::getKind(char group, int found, string keyword)
 				}
 				if(cat1 == 'R')
 				{
-					space2 = space;
 					endBound = parseSpaces(search);
-					if(endBound == "*")
-						space = space2;
-					if(endBound == "0" || "*")
+					firstBound = keyword;
+					keyword = endBound;
+					if(endBound == "0" || endBound == "*")
 						endBound = "9.99";
-					found = binarySearch(getKind(cat1), keyword, endBound);
-					findRating(keyword, search, endBound, found);
+					found = binarySearch(getKind(cat1), firstBound, endBound);
+					findRating(firstBound, endBound, found);
 				}
 				else
 					getKind(cat1, found, keyword);
+				if(keyword == "*")
+				{
+					star = search.find_first_of("*", 0);
+					star = search.find_first_not_of(" ", star+1);
+					secondSearch = search.substr(star);
+					keyword = getStarMatch(secondSearch);
+				}
+				if(keyword == "0")
+					break;
 				keyword = parseSpaces(search);
 				if(keyword == "*")
 				{
@@ -628,7 +636,7 @@ void data::getKind(char group, int found, string keyword)
 
 	string data::getStarMatch(string search)
 	{
-		string keyword, endBound, secondSearch;
+		string keyword, endBound, secondSearch, firstBound;
 		char cat2;
 		int firstX, star;
 		int found = 0, i=0;
@@ -651,13 +659,17 @@ void data::getKind(char group, int found, string keyword)
 			if(cat2 == 'R')
 			{
 				endBound = parseSpaces(search);
+				firstBound = keyword;
+				keyword = endBound;
 				if(endBound == "0")
 					endBound = "9.99";
 				found = binarySearch(getKind(cat2), keyword, endBound);
-				findRating(keyword, search, endBound, found);
+				findRating(keyword, endBound, found);
 			}
 			else
 				getKind(cat2, found, keyword);
+			if(keyword == "0")
+				break;
 			keyword = parseSpaces(search);
 		}
 		
@@ -668,7 +680,7 @@ void data::getKind(char group, int found, string keyword)
 	}
 
 
-	void data::findRating(string firstBound, string search, string endBound, int found)
+	void data::findRating(string firstBound, string endBound, int found)
 	{
 		//string endBound = parseSpaces(search);
 		if(endBound == "9.99")
