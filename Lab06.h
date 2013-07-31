@@ -79,6 +79,7 @@ public:
 	bool getMatches(std::string lineStr);
 	std::string getStarMatch(std::string search);
 	void data::getMatchesAux();
+	void printMatches();
 	void fetch();
 };
 

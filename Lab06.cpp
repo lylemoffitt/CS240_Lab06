@@ -495,7 +495,7 @@ void data::getKind(char group, int found, string keyword)
 				{
 					if(Movie[i].Name == keyword)
 					{
-						cout << Movie[i].link->Name << endl;
+						//cout << Movie[i].link->Name << endl;
 						vecTemp.push_back(Movie[i].link->Name);
 					}
 					else
@@ -505,7 +505,7 @@ void data::getKind(char group, int found, string keyword)
 				{
 					if(Movie[i].Name == keyword)
 					{
-						cout << Movie[i].link->Name << endl;
+						//cout << Movie[i].link->Name << endl;
 						vecTemp.push_back(Movie[i].link->Name);
 					}
 					else 
@@ -517,7 +517,7 @@ void data::getKind(char group, int found, string keyword)
 				{
 					if(Director[i].Name == keyword)
 					{
-						cout << Director[i].link->Name << endl;
+						//cout << Director[i].link->Name << endl;
 						vecTemp.push_back(Director[i].link->Name);
 					}
 					else
@@ -527,7 +527,7 @@ void data::getKind(char group, int found, string keyword)
 				{
 					if(Director[i].Name == keyword)
 					{
-						cout << Director[i].link->Name << endl;
+						//cout << Director[i].link->Name << endl;
 						vecTemp.push_back(Director[i].link->Name);
 					}
 					else
@@ -539,7 +539,7 @@ void data::getKind(char group, int found, string keyword)
 				{
 					if(Actor[i].Name == keyword)
 					{
-						cout << Actor[i].link->Name << endl;
+						//cout << Actor[i].link->Name << endl;
 						vecTemp.push_back(Actor[i].link->Name);
 					}
 					else
@@ -549,7 +549,7 @@ void data::getKind(char group, int found, string keyword)
 				{
 					if(Actor[i].Name == keyword)
 					{
-						cout << Actor[i].link->Name << endl;
+						//cout << Actor[i].link->Name << endl;
 						vecTemp.push_back(Actor[i].link->Name);
 					}
 					else 
@@ -622,7 +622,8 @@ void data::getKind(char group, int found, string keyword)
 					keyword = getStarMatch(secondSearch);
 				}
 			}
-			cout << "Type Exit to stop searching \nSearch: ";
+			printMatches();
+			cout << "\nType Exit to stop searching \nSearch: ";
 			getline(cin, search);
 			search = stringToupper(search);
 			found = 0, i=0;
@@ -693,7 +694,7 @@ void data::getKind(char group, int found, string keyword)
 			{
 				if(Rating[i].Name.compare(firstBound) >= 0)
 				{
-					cout << Rating[i].link->Name << endl;
+					//cout << Rating[i].link->Name << endl;
 					vecTemp.push_back(Rating[i].link->Name);
 				}
 				else
@@ -704,7 +705,7 @@ void data::getKind(char group, int found, string keyword)
 				return;
 			for(;i<Rating.size();i++)
 			{
-				cout << Rating[i].link->Name << endl;
+				//cout << Rating[i].link->Name << endl;
 				vecTemp.push_back(Rating[i].link->Name);
 			}
 		}
@@ -714,7 +715,7 @@ void data::getKind(char group, int found, string keyword)
 			{
 				if(Rating[i].Name.compare(firstBound) >= 0)
 				{
-					cout << Rating[i].link->Name << endl;
+					//cout << Rating[i].link->Name << endl;
 					vecTemp.push_back(Rating[i].link->Name);
 				}
 				else
@@ -729,7 +730,7 @@ void data::getKind(char group, int found, string keyword)
 				{
 					if(Rating[i].Name.compare(endBound) <= 0)
 					{
-						cout << Rating[i].link->Name << endl;
+						//cout << Rating[i].link->Name << endl;
 						vecTemp.push_back(Rating[i].link->Name);
 						i++;
 					}
@@ -742,6 +743,27 @@ void data::getKind(char group, int found, string keyword)
 		
 	}
 
+void data::printMatches()
+	{
+		int i =0,j=0;
+		vector<string> matches;
+		
+		while (i < vecTemp.size())
+		{
+			for(j=0;j<matches.size();j++)
+			{
+				if(vecTemp[i].compare(matches[j]) == 0)
+					break;
+			}
+			if(j >= matches.size())
+				matches.push_back(vecTemp[i]);
+			i++;
+		}
+
+		for(i=0;i<matches.size();i++)
+			cout << matches[i] << endl;
+		vecTemp.clear();
+	}
 
 //class stopWatch // Time object
 
